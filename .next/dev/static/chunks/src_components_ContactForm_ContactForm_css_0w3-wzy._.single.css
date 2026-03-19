@@ -1,0 +1,123 @@
+/* [project]/src/components/ContactForm/ContactForm.css [app-client] (css) */
+.contact-form {
+  background-color: var(--fg);
+  border-radius: 1em;
+  flex-direction: column;
+  gap: 4em;
+  margin: 2em;
+  padding: 2em;
+  display: flex;
+}
+
+.contact-form h3, .contact-form p, .contact-form input, .contact-form textarea {
+  color: var(--bg);
+}
+
+.contact-form input, .contact-form textarea {
+  background-color: var(--fg200);
+}
+
+.contact-form .btn {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+.contact-form-row:first-child {
+  gap: 1em;
+  width: 100%;
+  display: flex;
+}
+
+.contact-form-row-copy-item {
+  flex: 1;
+}
+
+.contact-form-row-copy-item:nth-child(2) {
+  text-align: center;
+}
+
+.contact-form-row-copy-item:nth-child(3) {
+  text-align: right;
+}
+
+.contact-form-col:first-child, .contact-form-header {
+  flex-direction: column;
+  gap: 1.5em;
+  display: flex;
+}
+
+.contact-form-header p {
+  width: 75%;
+  margin-bottom: .5em;
+}
+
+.contact-form-row:nth-child(2) {
+  gap: 1em;
+  display: flex;
+}
+
+.contact-form-col {
+  flex: 1;
+}
+
+.contact-form-col:first-child {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4em;
+  display: flex;
+}
+
+.contact-form-availability {
+  border-top: 1px dashed var(--bg);
+  justify-content: space-between;
+  gap: 1em;
+  width: 75%;
+  padding: .5em 0;
+  display: flex;
+}
+
+.contact-form-col:nth-child(2) {
+  flex-direction: column;
+  gap: .75em;
+  display: flex;
+}
+
+.form-item .btn {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .contact-form {
+    margin: 1.25em;
+  }
+
+  .contact-form-row:first-child {
+    flex-direction: column;
+    gap: .25em;
+  }
+
+  .contact-form-row-copy-item, .contact-form-row-copy-item:nth-child(3), .contact-form h3, .contact-form p {
+    text-align: center;
+  }
+
+  .contact-form-row:nth-child(2) {
+    flex-direction: column;
+    gap: 4em;
+  }
+
+  .contact-form-header p, .contact-form-availability {
+    width: 100%;
+  }
+
+  .contact-form-col:first-child {
+    gap: 2em;
+  }
+
+  .contact-form-availability {
+    text-align: center;
+    flex-direction: column;
+    gap: .25em;
+  }
+}
+
+/*# sourceMappingURL=src_components_ContactForm_ContactForm_css_0w3-wzy._.single.css.map*/

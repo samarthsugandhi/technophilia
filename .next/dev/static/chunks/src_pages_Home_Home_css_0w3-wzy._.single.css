@@ -1,0 +1,169 @@
+/* [project]/src/pages/Home/Home.css [app-client] (css) */
+.hero {
+  align-items: flex-end;
+  width: 100vw;
+  height: 100svh;
+  padding: 2em;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hero-header {
+  z-index: 1;
+  justify-content: space-between;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.hero-header h1 {
+  color: var(--bg);
+  line-height: 1;
+}
+
+.sticky-titles {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100svh;
+  padding: 2em;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.sticky-titles-nav, .sticky-titles-footer {
+  justify-content: space-between;
+  width: 100%;
+  display: flex;
+}
+
+.sticky-titles-nav {
+  border-bottom: 1px dashed var(--fg);
+  padding-bottom: .5em;
+}
+
+.sticky-titles-footer {
+  border-top: 1px dashed var(--fg);
+  padding-top: .5em;
+}
+
+.sticky-titles h2 {
+  text-align: center;
+  will-change: transform, opacity;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sticky-work-header {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100svh;
+  padding: 2em;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.sticky-work-header h1 {
+  opacity: .125;
+  line-height: 1;
+}
+
+.home-work {
+  width: 100%;
+  padding: 8em 2em;
+}
+
+.home-work-list {
+  flex-direction: column;
+  gap: 8em;
+  width: 40%;
+  margin: 0 auto;
+  display: flex;
+}
+
+.home-work-item {
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  display: flex;
+}
+
+.hobbies {
+  gap: 1em;
+  width: 100vw;
+  padding: 2em 2em 0;
+  display: flex;
+}
+
+.hobby {
+  text-align: center;
+  aspect-ratio: 1;
+  border: 1px dashed var(--fg);
+  border-radius: 1em;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+@media (max-width: 1000px) {
+  .hero, .sticky-titles, .sticky-work-header, .hobbies {
+    padding: 1.25em;
+  }
+
+  .sticky-titles h2 {
+    width: 90%;
+  }
+
+  .hobbies {
+    padding-bottom: 0;
+  }
+
+  .home-work {
+    padding: 8em 1.25em;
+  }
+
+  .home-work-list {
+    width: 100%;
+  }
+
+  .hobbies {
+    flex-direction: column;
+    gap: 1.25em;
+  }
+
+  .hobby {
+    aspect-ratio: 5 / 3;
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*# sourceMappingURL=src_pages_Home_Home_css_0w3-wzy._.single.css.map*/

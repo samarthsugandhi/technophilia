@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+# Keep Windows scripts with CRLF only if needed
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Ensure common source/config files stay LF (best for macOS/Linux)
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf

@@ -1,0 +1,16 @@
+/* [project]/src/components/AnimatedCopy/AnimatedCopy.css [app-client] (css) */
+.animated-copy [class^="line-"] {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  margin: 0;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.animated-copy [class^="line-inner-"] {
+  will-change: transform;
+  display: block;
+  position: relative;
+}
+
+/*# sourceMappingURL=src_components_AnimatedCopy_AnimatedCopy_css_0w3-wzy._.single.css.map*/

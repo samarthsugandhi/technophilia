@@ -1,0 +1,101 @@
+/* [project]/src/components/Footer/Footer.css [app-client] (css) */
+.footer {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100%;
+  min-height: 100svh;
+  padding: 4em 2em 2em;
+  display: flex;
+  overflow: hidden;
+}
+
+.footer-row:first-child {
+  justify-content: space-between;
+  gap: 4em;
+  display: flex;
+}
+
+.footer-contact, .footer-nav {
+  flex: 1;
+}
+
+.footer-nav {
+  flex-direction: column;
+  align-items: flex-end;
+  display: flex;
+}
+
+.footer-nav-item {
+  border-top: 1px dashed var(--fg);
+  justify-content: space-between;
+  width: 50%;
+  padding: 1em 0;
+  display: flex;
+}
+
+.footer-nav-item:last-child {
+  border-bottom: 1px dashed var(--fg);
+}
+
+.footer-contact {
+  flex-direction: column;
+  gap: 1.5em;
+  display: flex;
+}
+
+.footer-contact p {
+  margin-bottom: .5em;
+}
+
+.footer-header {
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  padding: 4em 0;
+  display: flex;
+}
+
+.footer-header h1 {
+  font-size: 15vw;
+  position: relative;
+  left: -.5vw;
+}
+
+.footer-copyright-line {
+  border-top: 1px dashed var(--fg);
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: .5em 0;
+  display: flex;
+}
+
+.footer-copyright-line p:nth-child(2) {
+  text-align: right;
+}
+
+@media (max-width: 1000px) {
+  .footer-row:first-child {
+    flex-direction: column;
+  }
+
+  .footer-nav {
+    align-items: flex-start;
+  }
+
+  .footer-nav-item {
+    width: 100%;
+  }
+
+  .footer-header {
+    padding: 1em 0;
+  }
+
+  .footer {
+    gap: 2em;
+    padding: 4em 1.25em 1.25em;
+  }
+}
+
+/*# sourceMappingURL=src_components_Footer_Footer_css_0w3-wzy._.single.css.map*/

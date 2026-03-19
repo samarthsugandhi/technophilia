@@ -1,0 +1,148 @@
+.reviews {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  padding: 4em 2em;
+  background-color: var(--fg);
+  color: var(--bg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+}
+
+/* ─── Banner Showcase variant ─── */
+.reviews--banners {
+  padding: 3em 2em 6em;
+  gap: 0;
+  overflow: hidden;
+}
+
+.banner-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.banner-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  will-change: clip-path, opacity;
+}
+
+/* ─── Thumbnail strip ─── */
+.reviews-list {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  display: flex;
+  gap: 0.75em;
+  z-index: 10;
+}
+
+.review-thumbnail {
+  aspect-ratio: 16/9;
+  width: 120px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.4em;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s ease-in-out, transform 0.3s ease;
+  filter: brightness(0.6);
+}
+
+.review-thumbnail:hover {
+  filter: brightness(0.85);
+  transform: translateY(-2px);
+}
+
+.review-thumbnail.active {
+  border-color: rgba(255, 255, 255, 0.9);
+  filter: brightness(1);
+  transform: translateY(-3px);
+}
+
+.review-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Legacy text review styles (kept for safety) ─── */
+#review-copy {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.review-item {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  padding: 2em;
+}
+
+#quote-icon {
+  position: absolute;
+  top: 25%;
+}
+
+h4#review-copy,
+h4#review-author {
+  font-kerning: none;
+  overflow: hidden;
+  line-height: 1 !important;
+}
+
+h4#review-copy .line,
+h4#review-author .line {
+  position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  overflow: hidden;
+}
+
+h4#review-copy .line span,
+h4#review-author .line span {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (max-width: 1000px) {
+  .reviews {
+    padding: 4em 1.25em;
+  }
+
+  .reviews--banners {
+    padding: 2em 1em 6em;
+  }
+
+  .review-thumbnail {
+    width: 80px;
+  }
+
+  #review-copy {
+    width: 100%;
+  }
+
+  .review-item {
+    padding: 1.25em;
+  }
+}

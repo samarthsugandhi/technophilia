@@ -1,0 +1,128 @@
+.admin-dashboard {
+  min-height: 100vh;
+  background-color: #050505;
+  color: #fff;
+  padding: 50px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.control-panel {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  background: #111;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.control-panel input, .control-panel select {
+  padding: 10px 15px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  border-radius: 4px;
+}
+
+.control-panel input:focus, .control-panel select:focus {
+  border-color: #666;
+}
+
+.btn-action {
+  padding: 10px 20px;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-action:hover {
+  background: #ccc;
+  transform: translateY(-2px);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 15px;
+  border-bottom: 1px solid #222;
+  font-size: 0.9rem;
+}
+
+th {
+  text-transform: uppercase;
+  color: #888;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+}
+
+/* Custom Toggle */
+.toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-bg {
+  width: 40px;
+  height: 20px;
+  background: #333;
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.toggle-bg.active {
+  background: #fff;
+}
+
+.toggle-bg.active-gold {
+  background: gold;
+}
+
+.toggle-knob {
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+.toggle-bg.active .toggle-knob, 
+.toggle-bg.active-gold .toggle-knob {
+  background: #000;
+}
