@@ -4,23 +4,69 @@ import "./Footer.css";
 
 import Link from "next/link";
 
+const mentors = [
+  {
+    name: "Prof. G. B. Shettar",
+    role: "Head, RISE Association",
+    phone: "9620863183",
+  },
+  {
+    name: "Dr. L. B. Bhajantri",
+    role: "Head of Department, ISE",
+    phone: "8660772398",
+  },
+];
+
+const PhoneIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3 .84h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 5.99 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16v.92z" />
+  </svg>
+);
+
 const Footer = () => {
   return (
     <div className="footer">
       <div className="footer-row">
         <div className="footer-contact">
-          <h3>
-            Have Questions? <br />
-            contact<span>@</span>technophilia.com
-          </h3>
+          <h3>Have Questions?</h3>
 
           <p className="secondary">
             Got a query about registration, events, or team formation? Reach out
-            to our coordinators — we&apos;re happy to help anytime.
+            to our faculty mentors or coordinators directly.
           </p>
 
+          <div className="footer-mentor-cards">
+            {mentors.map((m) => (
+              <a
+                key={m.name}
+                href={`tel:${m.phone}`}
+                className="footer-mentor-card"
+              >
+                <div className="footer-mentor-info">
+                  <span className="footer-mentor-name">{m.name}</span>
+                  <span className="footer-mentor-role">{m.role}</span>
+                </div>
+                <div className="footer-mentor-phone">
+                  <PhoneIcon />
+                  <span>{m.phone}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+
           <Link href="/contact" className="btn">
-            Get in Touch
+            Student Coordinators →
           </Link>
         </div>
 
@@ -53,8 +99,7 @@ const Footer = () => {
       </div>
       <div className="footer-row">
         <div className="footer-header">
-          <h1>TECHNO</h1>
-          <h1>PHILIA</h1>
+          <h1>TECHNOPHILIA</h1>
         </div>
 
         <div className="footer-copyright-line">

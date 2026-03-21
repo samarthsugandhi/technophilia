@@ -80,6 +80,75 @@
   display: block;
 }
 
+/* ─── Description Overlay ─── */
+.banner-desc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: overlayFadeIn 0.35s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.banner-desc-card {
+  position: relative;
+  max-width: 560px;
+  width: 90%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1em;
+  padding: 2.5em 2em 2em;
+  color: #fff;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  animation: cardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.banner-desc-close {
+  position: absolute;
+  top: 0.85em;
+  right: 1em;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2em 0.4em;
+  transition: color 0.2s ease;
+}
+
+.banner-desc-close:hover {
+  color: #fff;
+}
+
+.banner-desc-title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75em;
+  text-transform: uppercase;
+}
+
+.banner-desc-body {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 /* ─── Legacy text review styles (kept for safety) ─── */
 #review-copy {
   width: 50%;

@@ -52,7 +52,7 @@
   width: 100%;
   padding: 4em 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
 }
 
@@ -60,6 +60,8 @@
   position: relative;
   left: -0.5vw;
   font-size: 15vw;
+  width: 100%;
+  text-align: left;
 }
 
 .footer-copyright-line {
@@ -73,6 +75,59 @@
 
 .footer-copyright-line p:nth-child(2) {
   text-align: right;
+}
+
+/* ─── Footer mentor cards ─── */
+.footer-mentor-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.footer-mentor-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75em 1em;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 0.5em;
+  text-decoration: none;
+  color: var(--fg);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-mentor-card:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+.footer-mentor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.footer-mentor-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.footer-mentor-role {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.footer-mentor-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.88rem;
+  font-weight: 500;
+  opacity: 0.75;
 }
 
 @media (max-width: 1000px) {

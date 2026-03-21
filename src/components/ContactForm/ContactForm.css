@@ -60,7 +60,7 @@
   width: 75%;
 }
 
-.contact-form-row:nth-child(2) {
+.contact-row-main {
   display: flex;
   gap: 1em;
 }
@@ -85,20 +85,99 @@
   padding: 0.5em 0;
 }
 
-.contact-form-col:nth-child(2) {
+/* ─── Coordinator Cards ─── */
+.contact-cards-col {
   display: flex;
   flex-direction: column;
   gap: 0.75em;
 }
 
-.form-item .btn {
-  width: 100%;
+.coordinator-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 1.25em;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.6em;
+  text-decoration: none;
+  color: var(--bg);
+  transition: background 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+}
+
+.coordinator-card:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.coordinator-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.coordinator-name {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.coordinator-role {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.coordinator-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.coordinator-phone svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* ─── Section labels (Student Coordinators / Faculty Mentors) ─── */
+.contact-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  padding-bottom: 0.25em;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  margin-bottom: 0.1em;
+}
+
+.contact-section-label--mentors {
+  margin-top: 0.75em;
+}
+
+/* ─── Mentor card variant ─── */
+.coordinator-card--mentor {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.coordinator-card--mentor:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 @media (max-width: 900px) {
   .contact-form {
     margin: 1.25em;
   }
+
   .contact-form-row:nth-child(1) {
     flex-direction: column;
     gap: 0.25em;
@@ -114,7 +193,7 @@
     text-align: center;
   }
 
-  .contact-form-row:nth-child(2) {
+  .contact-row-main {
     flex-direction: column;
     gap: 4em;
   }
@@ -132,5 +211,9 @@
     flex-direction: column;
     text-align: center;
     gap: 0.25em;
+  }
+
+  .coordinator-card {
+    padding: 0.85em 1em;
   }
 }
