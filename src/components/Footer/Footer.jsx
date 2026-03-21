@@ -7,8 +7,13 @@ import Link from "next/link";
 const mentors = [
   {
     name: "Prof. G. B. Shettar",
-    role: "Head, RISE Association",
+    role: "Coordinator, RISE Association",
     phone: "9620863183",
+  },
+  {
+    name: "Prof. S. S. Hiremath",
+    role: "Coordinator, RISE Association",
+    phone: "8867348752",
   },
   {
     name: "Dr. L. B. Bhajantri",
@@ -104,8 +109,8 @@ const Footer = () => {
 
         <div className="footer-copyright-line">
           <p className="primary sm">&copy; TECHNOPHILIA 3.0 &mdash; 2026</p>
-          <p className="primary sm">Built by Samarth Sugandhi &mdash; RISE Association, BEC</p>
-          <p className="primary sm">Prof. G. B. Shettar &mdash; Mentor, RISE Association, BEC</p>
+          <p className="primary sm">Built by Samarth Sugandhi &mdash; Media, RISE Association, BEC</p>
+          <p className="primary sm">Vinayak Killedar &mdash; Treasurer, RISE Association, BEC</p>
         </div>
       </div>
     </div>

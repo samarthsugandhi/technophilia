@@ -39,7 +39,7 @@ const RegisterClient = () => {
   const [formData, setFormData] = useState({
     teamName: "",
     leader: { name: "", usn: "", semester: "", email: "", phone: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
-    member2: { name: "", semester: "", usn: "", email: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
+    teammate: { name: "", semester: "", usn: "", email: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -100,8 +100,8 @@ const RegisterClient = () => {
       emails.push(formData.leader.email);
     }
     if (currentPage >= 4) {
-      usns.push(formData.member2.usn);
-      emails.push(formData.member2.email);
+      usns.push(formData.teammate.usn);
+      emails.push(formData.teammate.email);
     }
 
     return {
@@ -142,7 +142,7 @@ const RegisterClient = () => {
   };
 
   const getTeamStaySummary = () => {
-    const participants = [formData.leader, formData.member2].filter(Boolean);
+    const participants = [formData.leader, formData.teammate].filter(Boolean);
     const total = participants.length;
 
     const localCount = participants.filter((p) => p.stayType !== "Hostel").length;
@@ -197,10 +197,17 @@ const RegisterClient = () => {
     ctx.font = "20px Georgia";
     ctx.fillText("April 1-2, 2026", 60, 620);
 
-    const link = document.createElement("a");
-    link.href = card.toDataURL("image/png");
-    link.download = `${regId}-event-pass.png`;
-    link.click();
+    card.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${regId}-event-pass.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, "image/png");
   }, [formData.teamName, regId]);
 
   const validatePage = (currentPage) => {
@@ -232,21 +239,21 @@ const RegisterClient = () => {
     }
 
     if (currentPage === 4) {
-      if (!formData.member2.name.trim()) return "Member 2 name is required";
-      if (!formData.member2.semester) return "Member 2 semester is required";
-      if (!formData.member2.usn.trim()) return "Member 2 USN/CSN is required";
-      if (!isValidUsnForSemester(formData.member2.usn, formData.member2.semester)) {
-        return isSemOneOrTwo(formData.member2.semester)
-          ? "Member 2 CSN must be a valid 10-digit number (example: 2025010590)"
-          : "Member 2 USN format must be like 2BA23IS080";
+      if (!formData.teammate.name.trim()) return "Teammate name is required";
+      if (!formData.teammate.semester) return "Teammate semester is required";
+      if (!formData.teammate.usn.trim()) return "Teammate USN/CSN is required";
+      if (!isValidUsnForSemester(formData.teammate.usn, formData.teammate.semester)) {
+        return isSemOneOrTwo(formData.teammate.semester)
+          ? "Teammate CSN must be a valid 10-digit number (example: 2025010590)"
+          : "Teammate USN format must be like 2BA23IS080";
       }
-      if (!formData.member2.email.trim()) return "Member 2 email is required";
-      if (!isValidEmail(formData.member2.email)) return "Member 2 email format is invalid";
-      if (!formData.member2.branch.trim()) return "Member 2 branch is required";
-      if (formData.member2.branch === "Others" && !formData.member2.otherBranch.trim()) {
-        return "Please specify Member 2 branch";
+      if (!formData.teammate.email.trim()) return "Teammate email is required";
+      if (!isValidEmail(formData.teammate.email)) return "Teammate email format is invalid";
+      if (!formData.teammate.branch.trim()) return "Teammate branch is required";
+      if (formData.teammate.branch === "Others" && !formData.teammate.otherBranch.trim()) {
+        return "Please specify Teammate branch";
       }
-      if (formData.member2.stayType === "Hostel" && !formData.member2.hostel) return "Please select Member 2 hostel";
+      if (formData.teammate.stayType === "Hostel" && !formData.teammate.hostel) return "Please select Teammate hostel";
     }
 
     return "";
@@ -296,7 +303,7 @@ const RegisterClient = () => {
   };
 
   const uL = (e) => setFormData(p => ({ ...p, leader: { ...p.leader, [e.target.name]: e.target.value } }));
-  const u2 = (e) => setFormData(p => ({ ...p, member2: { ...p.member2, [e.target.name]: e.target.value } }));
+  const u2 = (e) => setFormData(p => ({ ...p, teammate: { ...p.teammate, [e.target.name]: e.target.value } }));
   const submit = async () => {
     const preSubmitValidation = validatePage(4);
     if (preSubmitValidation) {
@@ -344,9 +351,9 @@ const RegisterClient = () => {
           leader: leaderPayload,
           members: [
             {
-              ...formData.member2,
-              branch: resolveBranch(formData.member2),
-              hostelName: formData.member2.stayType === "Hostel" ? formData.member2.hostel : "",
+              ...formData.teammate,
+              branch: resolveBranch(formData.teammate),
+              hostelName: formData.teammate.stayType === "Hostel" ? formData.teammate.hostel : "",
             },
           ],
         }),
@@ -522,46 +529,46 @@ const RegisterClient = () => {
               </div>
             )}
 
-            {/* ── MEMBER 2 ── */}
+            {/* ── TEAMMATE ── */}
             {page === 4 && (
               <div className="bk-fields-wrap">
-                <h3 className="bk-head">Member 2</h3>
+                <h3 className="bk-head">Teammate</h3>
                 <div className="bk-fields">
-                  <F label="Full Name" name="name" value={formData.member2.name} onChange={u2} required />
+                  <F label="Full Name" name="name" value={formData.teammate.name} onChange={u2} required />
                   <div className="bk-field">
                     <label>Semester<span className="bk-req">*</span></label>
-                    <select name="semester" value={formData.member2.semester} onChange={u2}>
+                    <select name="semester" value={formData.teammate.semester} onChange={u2}>
                       <option value="">— Select Semester —</option>
                       {SEMESTERS.map(s => <option key={s}>{s}</option>)}
                     </select>
                   </div>
-                  <F label="CSN / USN" name="usn" value={formData.member2.usn} onChange={u2} required />
-                  <F label="Email" name="email" type="email" value={formData.member2.email} onChange={u2} required />
+                  <F label="CSN / USN" name="usn" value={formData.teammate.usn} onChange={u2} required />
+                  <F label="Email" name="email" type="email" value={formData.teammate.email} onChange={u2} required />
                   <div className="bk-field">
                     <label>Branch<span className="bk-req">*</span></label>
-                    <select name="branch" value={formData.member2.branch} onChange={u2}>
+                    <select name="branch" value={formData.teammate.branch} onChange={u2}>
                       <option value="">— Select Branch —</option>
                       {BRANCH_OPTIONS.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
                     </select>
                   </div>
-                  {formData.member2.branch === "Others" && (
-                    <F label="Specify Branch" name="otherBranch" value={formData.member2.otherBranch} onChange={u2} required />
+                  {formData.teammate.branch === "Others" && (
+                    <F label="Specify Branch" name="otherBranch" value={formData.teammate.otherBranch} onChange={u2} required />
                   )}
                   <div className="bk-field">
                     <label>Stay Type</label>
                     <div className="bk-radio-group">
                       {["Local","Hostel"].map(t => (
                         <label key={t} className="bk-radio-label">
-                          <input type="radio" name="stayType" value={t} checked={formData.member2.stayType === t} onChange={u2} />
+                          <input type="radio" name="stayType" value={t} checked={formData.teammate.stayType === t} onChange={u2} />
                           {t}
                         </label>
                       ))}
                     </div>
                   </div>
-                  {formData.member2.stayType === "Hostel" && (
+                  {formData.teammate.stayType === "Hostel" && (
                     <div className="bk-field">
                       <label>Hostel</label>
-                      <select name="hostel" value={formData.member2.hostel} onChange={u2}>
+                      <select name="hostel" value={formData.teammate.hostel} onChange={u2}>
                         <option value="">— Select Hostel —</option>
                         {HOSTELS.map(h => <option key={h}>{h}</option>)}
                       </select>
@@ -584,9 +591,9 @@ const RegisterClient = () => {
                     ["Email", formData.leader.email],
                     ["Leader Branch", resolveBranch(formData.leader)],
                     ["Leader Stay", formatStay(formData.leader)],
-                    ["Member 2", `${formData.member2.name} · ${formData.member2.usn} · ${formData.member2.semester}`],
-                    ["Member 2 Branch", resolveBranch(formData.member2)],
-                    ["Member 2 Stay", formatStay(formData.member2)],
+                    ["Teammate", `${formData.teammate.name} · ${formData.teammate.usn} · ${formData.teammate.semester}`],
+                    ["Teammate Branch", resolveBranch(formData.teammate)],
+                    ["Teammate Stay", formatStay(formData.teammate)],
                     ["Team Stay Summary", getTeamStaySummary()],
                   ].map(([k, v]) => (
                     <div className="bk-review-row" key={k}>

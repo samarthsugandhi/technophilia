@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Menu.css";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 
 const Menu = () => {
@@ -62,29 +62,21 @@ const Menu = () => {
     } else return;
   };
 
-  const handleLinkClick = (path) => {
+  const router = useRouter();
+  
+  const handleLinkClick = (e, path) => {
+    e.preventDefault();
+    closeMenu();
     if (path !== pathname) {
-      // Navigating away — wait for page transition then close
-      setShouldDelayClose(true);
-    } else {
-      // Already on this page — close menu immediately
-      closeMenu();
+      setTimeout(() => {
+        router.push(path);
+      }, 1000);
     }
   };
 
   useEffect(() => {
-    if (pathname !== previousPathRef.current && shouldDelayClose) {
-      const timer = setTimeout(() => {
-        closeMenu();
-        setShouldDelayClose(false);
-      }, 700);
-
-      previousPathRef.current = pathname;
-      return () => clearTimeout(timer);
-    }
-
     previousPathRef.current = pathname;
-  }, [pathname, shouldDelayClose]);
+  }, [pathname]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -110,6 +102,10 @@ const Menu = () => {
     menuAnimation.current?.kill();
     menuBarAnimation.current?.kill();
     menuLinksAnimation.current?.kill();
+
+    gsap.set(".menu", { clearProps: "all" });
+    gsap.set(".menu-bar", { clearProps: "all" });
+    gsap.set(".menu-link-item-holder", { clearProps: "all" });
 
     gsap.set(".menu-link-item-holder", { y: 125 });
 
@@ -222,13 +218,13 @@ const Menu = () => {
               {menuLinks.map((link, index) => (
                 <div key={index} className="menu-link-item">
                   <div className="menu-link-item-holder">
-                    <Link
+                    <a
                       className="menu-link"
                       href={link.path}
-                      onClick={() => handleLinkClick(link.path)}
+                      onClick={(e) => handleLinkClick(e, link.path)}
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   </div>
                 </div>
               ))}

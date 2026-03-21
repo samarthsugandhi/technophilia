@@ -4,9 +4,9 @@ import { z } from "zod";
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 
-function generateRegistrationId() {
-  const randomHex = crypto.randomBytes(3).toString("hex").toUpperCase();
-  return `TECH2026-${randomHex}`;
+function generateRegistrationId(count, attempt) {
+  const numId = count + 1 + attempt;
+  return `BA-IS-${String(numId).padStart(3, '0')}`;
 }
 
 const memberSchema = z.object({
@@ -124,8 +124,10 @@ export async function POST(req) {
     let savedTeam = null;
     let registrationId = "";
 
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      registrationId = generateRegistrationId();
+    const baseCount = await Team.countDocuments();
+
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      registrationId = generateRegistrationId(baseCount, attempt);
 
       try {
         const newTeam = new Team({

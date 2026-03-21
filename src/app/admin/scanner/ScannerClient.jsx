@@ -30,10 +30,14 @@ const ScannerClient = () => {
     if (status !== "authenticated") return;
 
     // Load Html5QrcodeScanner dynamically inside useEffect to avoid SSR window errors
-    import("html5-qrcode").then(({ Html5QrcodeScanner }) => {
+    import("html5-qrcode").then(({ Html5QrcodeScanner, Html5QrcodeSupportedFormats }) => {
       let scanner = new Html5QrcodeScanner(
         "qr-reader",
-        { fps: 10, qrbox: { width: 250, height: 250 } },
+        { 
+          fps: 15, 
+          qrbox: { width: 250, height: 250 },
+          formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
+        },
         false
       );
 
@@ -42,6 +46,10 @@ const ScannerClient = () => {
 
       function onScanSuccess(decodedText) {
         if (isScanningRef.current) return;
+        if (window.lastScannedCode === decodedText) return;
+        window.lastScannedCode = decodedText;
+        setTimeout(() => { window.lastScannedCode = null; }, 5000);
+
         isScanningRef.current = true;
         processAttendance(decodedText);
       }
@@ -87,7 +95,7 @@ const ScannerClient = () => {
     setTimeout(() => {
       isScanningRef.current = false;
       setScanResult({ state: "idle", message: "" });
-    }, 3000);
+    }, 1200);
   };
 
   const triggerFlash = (color) => {

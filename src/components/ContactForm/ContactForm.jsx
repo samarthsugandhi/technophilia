@@ -2,10 +2,10 @@ import React from "react";
 import "./ContactForm.css";
 
 const coordinators = [
-  { name: "Vinayak", role: "Student Coordinator", phone: "6361767094" },
   { name: "Abhishek", role: "Student Coordinator", phone: "9620983157" },
-  { name: "Bhavana", role: "Student Coordinator", phone: "9353089702" },
   { name: "Parth", role: "Student Coordinator", phone: "7760566090" },
+  { name: "Shrilaxmi", role: "Student Coordinator", phone: "9019635191" },
+  { name: "Bhavana", role: "Student Coordinator", phone: "9353089702" },
 ];
 
 const ContactForm = () => {
