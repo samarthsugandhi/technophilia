@@ -34,17 +34,32 @@ const Home = () => {
   const heroRef = useRef(null);
 
   useEffect(() => {
-    const target = new Date("2026-04-03T10:00:00").getTime();
-    const interval = setInterval(() => {
+    const target = new Date("2026-04-01T17:30:00+05:30").getTime();
+
+    const updateCountdown = () => {
       const distance = target - new Date().getTime();
-      if (distance < 0) return clearInterval(interval);
+      if (distance <= 0) {
+        setTimeLeft({ days: 0, hours: 0, mins: 0, secs: 0 });
+        return false;
+      }
+
       setTimeLeft({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         mins: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
         secs: Math.floor((distance % (1000 * 60)) / 1000)
       });
+
+      return true;
+    };
+
+    updateCountdown();
+
+    const interval = setInterval(() => {
+      const isActive = updateCountdown();
+      if (!isActive) clearInterval(interval);
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -207,9 +222,9 @@ const Home = () => {
             <AnimatedCopy tag="h1" animateOnScroll={false} delay={0.7} className="tech-title" style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}>
               TECHNOPHILIA 3.0
             </AnimatedCopy>
-            <AnimatedCopy tag="h2" animateOnScroll={false} delay={0.9} style={{ color: '#aaa', marginTop: '20px', fontFamily: 'monospace', fontSize: '2rem' }}>
-              {timeLeft.days}D : {String(timeLeft.hours).padStart(2,'0')}H : {String(timeLeft.mins).padStart(2,'0')}M : {String(timeLeft.secs).padStart(2,'0')}S
-            </AnimatedCopy>
+            <h2 style={{ marginTop: '20px' }}>
+              {timeLeft.days}D:{String(timeLeft.hours).padStart(2,'0')}H:{String(timeLeft.mins).padStart(2,'0')}M:{String(timeLeft.secs).padStart(2,'0')}S
+            </h2>
             <Link href="/register" className="hero-register-btn">
               REGISTER NOW
             </Link>
@@ -219,7 +234,7 @@ const Home = () => {
         <section ref={stickyTitlesRef} className="sticky-titles">
           <div className="sticky-titles-nav">
             <p className="primary sm">ISE Dept. — BEC, Bagalkot</p>
-            <p className="primary sm">3rd – 4th April 2026</p>
+            <p className="primary sm">1st – 2nd April 2026</p>
           </div>
           <div className="sticky-titles-footer">
             <p className="primary sm">RISE Association Presents</p>

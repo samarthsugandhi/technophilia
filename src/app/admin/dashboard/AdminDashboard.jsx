@@ -29,8 +29,7 @@ const fetcher = async (url, token) => {
       ? payload.teams
       : [];
 
-  const source = res.headers.get("x-admin-data-source") || "database";
-  return { teams, source };
+  return { teams };
 };
 
 export default function AdminDashboard() {
@@ -71,8 +70,6 @@ export default function AdminDashboard() {
   }, [error, router]);
 
   const teams = data?.teams || [];
-  const dataSource = data?.source || "database";
-
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     router.push("/admin/login");
@@ -109,7 +106,7 @@ export default function AdminDashboard() {
       <header className="admin-header">
         <div className="admin-header-left">
           <h1>TECHNOPHILIA 3.0 - CONTROL PANEL</h1>
-          <p>April 3-4, 2026</p>
+          <p>April 1-2, 2026</p>
         </div>
         <button onClick={handleLogout} className="admin-logout-btn">
           LOGOUT
@@ -152,11 +149,6 @@ export default function AdminDashboard() {
 
         <main className="admin-content">
           <div className="admin-status-bar">
-            {dataSource === "mock" && (
-              <span className="admin-banner admin-banner-warning">
-                Running in test mode (seeded teams) because database is unavailable.
-              </span>
-            )}
             {error && data && (
               <span className="admin-banner admin-banner-error">
                 Live sync issue: {error.message}

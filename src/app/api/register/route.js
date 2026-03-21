@@ -33,7 +33,7 @@ const registerSchema = z.object({
     hostelName: z.string().optional(),
     hostel: z.string().optional(),
   }),
-  members: z.array(memberSchema).length(2, "Must securely have exactly 2 members"),
+  members: z.array(memberSchema).length(1, "Must have exactly 1 additional member"),
 }).superRefine((data, ctx) => {
   const requiresCSN = (semester) => semester === "1st Sem" || semester === "2nd Sem";
   const isCSN = (value) => /^\d{10}$/.test(String(value || "").trim());

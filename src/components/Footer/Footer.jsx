@@ -59,7 +59,8 @@ const Footer = () => {
 
         <div className="footer-copyright-line">
           <p className="primary sm">&copy; TECHNOPHILIA 3.0 &mdash; 2026</p>
-          <p className="primary sm">Built by Samarth Sugandhi &amp; Sangam Gaddi &mdash; RISE Association, BEC</p>
+          <p className="primary sm">Built by Samarth Sugandhi &mdash; RISE Association, BEC</p>
+          <p className="primary sm">Prof. G. B. Shettar &mdash; Mentor, RISE Association, BEC</p>
         </div>
       </div>
     </div>

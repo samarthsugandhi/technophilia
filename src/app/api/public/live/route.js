@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/mongodb";
 import Team from "../../../../models/Team";
-import { getMockTeams } from "../../../../lib/adminMockTeams";
 
 export const dynamic = 'force-dynamic';
 
@@ -34,31 +33,13 @@ export async function GET() {
       })
       .flat()
       .sort((a, b) => a.awardOrder - b.awardOrder);
-    
-    return NextResponse.json({ shortlisted, winners }, { status: 200 });
-  } catch {
-    const mockTeams = getMockTeams();
-    const shortlisted = mockTeams
-      .filter((team) => team.shortlisted)
-      .map((team) => ({ teamName: team.teamName, registrationId: team.registrationId }));
-
-    const winners = mockTeams
-      .map((team) => {
-        const entries = [];
-        if (team.winner) {
-          entries.push({ ...team, awardRank: "winner", awardLabel: "Winner", awardOrder: 1 });
-        }
-        if (team.firstRunnerUp) {
-          entries.push({ ...team, awardRank: "firstRunnerUp", awardLabel: "1st Runner-up", awardOrder: 2 });
-        }
-        if (team.secondRunnerUp) {
-          entries.push({ ...team, awardRank: "secondRunnerUp", awardLabel: "2nd Runner-up", awardOrder: 3 });
-        }
-        return entries;
-      })
-      .flat()
-      .sort((a, b) => a.awardOrder - b.awardOrder);
 
     return NextResponse.json({ shortlisted, winners }, { status: 200 });
+  } catch (error) {
+    console.error("GET /api/public/live: database unavailable", error);
+    return NextResponse.json(
+      { error: "Database unavailable. Please try again in a moment." },
+      { status: 503 }
+    );
   }
 }

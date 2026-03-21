@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import connectDB from "../../../../../lib/mongodb";
 import Team from "../../../../../models/Team";
 import { verifyAdminToken } from "../../../../../lib/auth";
-import { deleteMockTeam } from "../../../../../lib/adminMockTeams";
 
 export async function DELETE(req, { params }) {
   const { id } = params;
@@ -36,19 +35,10 @@ export async function DELETE(req, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("DELETE /api/admin/teams/[id]: database unavailable, trying mock delete", error);
-
-    const deleted = deleteMockTeam(id);
-    if (!deleted) {
-      return NextResponse.json(
-        { error: "Team not found" },
-        { status: 404 }
-      );
-    }
-
+    console.error("DELETE /api/admin/teams/[id]: database unavailable", error);
     return NextResponse.json(
-      { message: "Mock team deleted successfully", deletedId: id },
-      { status: 200, headers: { "x-admin-data-source": "mock" } }
+      { error: "Database unavailable. Please try again in a moment." },
+      { status: 503 }
     );
   }
 }

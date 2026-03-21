@@ -24,7 +24,7 @@ const teamSchema = new mongoose.Schema({
       stayType: { type: String, required: true, enum: ['Local', 'Hostel'] },
       hostelName: { type: String },
     }],
-    validate: [arrayLimit, '{PATH} must have exactly 2 members']
+    validate: [arrayLimit, '{PATH} must have exactly 1 member']
   },
   attendanceMarked: { type: Boolean, default: false },
   shortlisted: { type: Boolean, default: false },
@@ -34,7 +34,7 @@ const teamSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 function arrayLimit(val) {
-  return val.length === 2;
+  return val.length === 1;
 }
 
 // Global Uniqueness Check

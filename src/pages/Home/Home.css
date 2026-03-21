@@ -51,6 +51,11 @@
   line-height: 1;
 }
 
+.tech-title {
+  text-align: center;
+  width: 100%;
+}
+
 .sticky-titles {
   position: relative;
   width: 100vw;
@@ -279,7 +284,24 @@
 }
 
 @media (max-width: 1000px) {
-  .hero,
+  .hero {
+    padding: 1.25em;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .hero-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tech-title {
+    text-align: center;
+    width: 100%;
+  }
+
   .sticky-titles,
   .sticky-work-header,
   .hobbies {

@@ -9,7 +9,7 @@ const ContactForm = () => {
           <p className="primary sm">TECHNOPHILIA 3.0</p>
         </div>
         <div className="contact-form-row-copy-item">
-          <p className="primary sm">3rd &amp; 4th April 2026</p>
+          <p className="primary sm">1st &amp; 2nd April 2026</p>
         </div>
         <div className="contact-form-row-copy-item">
           <p className="primary sm">&copy; 2026</p>
@@ -28,7 +28,7 @@ const ContactForm = () => {
           </div>
 
           <div className="contact-form-availability">
-            <p className="primary sm">Event: 3rd &amp; 4th April 2026</p>
+            <p className="primary sm">Event: 1st &amp; 2nd April 2026</p>
             <p className="primary sm">Venue: ISE Dept. — BEC, Bagalkot</p>
           </div>
         </div>

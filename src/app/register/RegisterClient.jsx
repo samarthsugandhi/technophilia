@@ -22,7 +22,7 @@ const BRANCH_OPTIONS = [
   "Industrial and Production Engineering",
   "Others",
 ];
-const TOTAL_PAGES = 7; // 0=cover, 1=team, 2=leader1, 3=leader2, 4=mem2, 5=mem3, 6=review
+const TOTAL_PAGES = 6; // 0=cover, 1=team, 2=leader1, 3=leader2, 4=mem2, 5=review
 
 /* ── Field component ── */
 const F = ({ label, name, value, onChange, type="text", required, children }) => (
@@ -40,7 +40,6 @@ const RegisterClient = () => {
     teamName: "",
     leader: { name: "", usn: "", semester: "", email: "", phone: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
     member2: { name: "", semester: "", usn: "", email: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
-    member3: { name: "", semester: "", usn: "", email: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -104,10 +103,6 @@ const RegisterClient = () => {
       usns.push(formData.member2.usn);
       emails.push(formData.member2.email);
     }
-    if (currentPage >= 5) {
-      usns.push(formData.member3.usn);
-      emails.push(formData.member3.email);
-    }
 
     return {
       usns: usns.map((u) => String(u || "").trim()).filter(Boolean),
@@ -147,7 +142,7 @@ const RegisterClient = () => {
   };
 
   const getTeamStaySummary = () => {
-    const participants = [formData.leader, formData.member2, formData.member3].filter(Boolean);
+    const participants = [formData.leader, formData.member2].filter(Boolean);
     const total = participants.length;
 
     const localCount = participants.filter((p) => p.stayType !== "Hostel").length;
@@ -200,7 +195,7 @@ const RegisterClient = () => {
 
     ctx.fillStyle = "#9f9f9f";
     ctx.font = "20px Georgia";
-    ctx.fillText("April 3-4, 2026", 60, 620);
+    ctx.fillText("April 1-2, 2026", 60, 620);
 
     const link = document.createElement("a");
     link.href = card.toDataURL("image/png");
@@ -254,24 +249,6 @@ const RegisterClient = () => {
       if (formData.member2.stayType === "Hostel" && !formData.member2.hostel) return "Please select Member 2 hostel";
     }
 
-    if (currentPage === 5) {
-      if (!formData.member3.name.trim()) return "Member 3 name is required";
-      if (!formData.member3.semester) return "Member 3 semester is required";
-      if (!formData.member3.usn.trim()) return "Member 3 USN/CSN is required";
-      if (!isValidUsnForSemester(formData.member3.usn, formData.member3.semester)) {
-        return isSemOneOrTwo(formData.member3.semester)
-          ? "Member 3 CSN must be a valid 10-digit number (example: 2025010590)"
-          : "Member 3 USN format must be like 2BA23IS080";
-      }
-      if (!formData.member3.email.trim()) return "Member 3 email is required";
-      if (!isValidEmail(formData.member3.email)) return "Member 3 email format is invalid";
-      if (!formData.member3.branch.trim()) return "Member 3 branch is required";
-      if (formData.member3.branch === "Others" && !formData.member3.otherBranch.trim()) {
-        return "Please specify Member 3 branch";
-      }
-      if (formData.member3.stayType === "Hostel" && !formData.member3.hostel) return "Please select Member 3 hostel";
-    }
-
     return "";
   };
 
@@ -320,16 +297,14 @@ const RegisterClient = () => {
 
   const uL = (e) => setFormData(p => ({ ...p, leader: { ...p.leader, [e.target.name]: e.target.value } }));
   const u2 = (e) => setFormData(p => ({ ...p, member2: { ...p.member2, [e.target.name]: e.target.value } }));
-  const u3 = (e) => setFormData(p => ({ ...p, member3: { ...p.member3, [e.target.name]: e.target.value } }));
-
   const submit = async () => {
-    const preSubmitValidation = validatePage(5);
+    const preSubmitValidation = validatePage(4);
     if (preSubmitValidation) {
       alert(preSubmitValidation);
       return;
     }
 
-    const ids = getIdentifiersUptoPage(5);
+    const ids = getIdentifiersUptoPage(4);
     const localDupUsn = duplicateValueFromList(ids.usns);
     const localDupEmail = duplicateValueFromList(ids.emails);
     if (localDupUsn) {
@@ -372,11 +347,6 @@ const RegisterClient = () => {
               ...formData.member2,
               branch: resolveBranch(formData.member2),
               hostelName: formData.member2.stayType === "Hostel" ? formData.member2.hostel : "",
-            },
-            {
-              ...formData.member3,
-              branch: resolveBranch(formData.member3),
-              hostelName: formData.member3.stayType === "Hostel" ? formData.member3.hostel : "",
             },
           ],
         }),
@@ -601,57 +571,8 @@ const RegisterClient = () => {
               </div>
             )}
 
-            {/* ── MEMBER 3 ── */}
-            {page === 5 && (
-              <div className="bk-fields-wrap">
-                <h3 className="bk-head">Member 3</h3>
-                <div className="bk-fields">
-                  <F label="Full Name" name="name" value={formData.member3.name} onChange={u3} required />
-                  <div className="bk-field">
-                    <label>Semester<span className="bk-req">*</span></label>
-                    <select name="semester" value={formData.member3.semester} onChange={u3}>
-                      <option value="">— Select Semester —</option>
-                      {SEMESTERS.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                  <F label="CSN / USN" name="usn" value={formData.member3.usn} onChange={u3} required />
-                  <F label="Email" name="email" type="email" value={formData.member3.email} onChange={u3} required />
-                  <div className="bk-field">
-                    <label>Branch<span className="bk-req">*</span></label>
-                    <select name="branch" value={formData.member3.branch} onChange={u3}>
-                      <option value="">— Select Branch —</option>
-                      {BRANCH_OPTIONS.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
-                    </select>
-                  </div>
-                  {formData.member3.branch === "Others" && (
-                    <F label="Specify Branch" name="otherBranch" value={formData.member3.otherBranch} onChange={u3} required />
-                  )}
-                  <div className="bk-field">
-                    <label>Stay Type</label>
-                    <div className="bk-radio-group">
-                      {["Local","Hostel"].map(t => (
-                        <label key={t} className="bk-radio-label">
-                          <input type="radio" name="stayType" value={t} checked={formData.member3.stayType === t} onChange={u3} />
-                          {t}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  {formData.member3.stayType === "Hostel" && (
-                    <div className="bk-field">
-                      <label>Hostel</label>
-                      <select name="hostel" value={formData.member3.hostel} onChange={u3}>
-                        <option value="">— Select Hostel —</option>
-                        {HOSTELS.map(h => <option key={h}>{h}</option>)}
-                      </select>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
             {/* ── REVIEW ── */}
-            {page === 6 && (
+            {page === 5 && (
               <div className="bk-fields-wrap">
                 <h3 className="bk-head">Review & Submit</h3>
                 <div className="bk-review">
@@ -666,9 +587,6 @@ const RegisterClient = () => {
                     ["Member 2", `${formData.member2.name} · ${formData.member2.usn} · ${formData.member2.semester}`],
                     ["Member 2 Branch", resolveBranch(formData.member2)],
                     ["Member 2 Stay", formatStay(formData.member2)],
-                    ["Member 3", `${formData.member3.name} · ${formData.member3.usn} · ${formData.member3.semester}`],
-                    ["Member 3 Branch", resolveBranch(formData.member3)],
-                    ["Member 3 Stay", formatStay(formData.member3)],
                     ["Team Stay Summary", getTeamStaySummary()],
                   ].map(([k, v]) => (
                     <div className="bk-review-row" key={k}>

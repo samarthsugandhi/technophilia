@@ -7,7 +7,7 @@ export const faqItems = [
   {
     question: "When and where is TECHNOPHILIA 3.0?",
     answer:
-      "The event is held on 3rd & 4th April 2026, starting at 4:30 PM and ending at 8:30 PM each day, at the ISE Department, Basaveshwar Engineering College, Bagalkot.",
+      "The event is held on 1st & 2nd April 2026 at the ISE Department, Basaveshwar Engineering College, Bagalkot. Day 1 starts at 5:30 PM on 1st April.",
   },
   {
     question: "What are the 7 events in TECHNOPHILIA 3.0?",
@@ -17,7 +17,7 @@ export const faqItems = [
   {
     question: "What is the team size?",
     answer:
-      "Each team must have exactly 3 members — 1 team leader and 2 additional members. Solo or 2-member registrations are not accepted.",
+      "Each team must have exactly 2 members — 1 team leader and 1 additional member.",
   },
   {
     question: "Is registration free?",
@@ -37,7 +37,7 @@ export const faqItems = [
   {
     question: "How do I register my team?",
     answer:
-      "Click the 'Register' link in the navigation or visit /register. Fill in your team name, leader details (name, CSN/USN, branch, semester, hostel info), and add 2 more members. You'll receive a confirmation ID and a QR code upon successful registration.",
+      "Click the 'Register' link in the navigation or visit /register. Fill in your team name, leader details (name, CSN/USN, branch, semester, hostel info), and add 1 more member. You'll receive a confirmation ID and a QR code upon successful registration.",
   },
   {
     question: "What is CSN vs USN?",
@@ -57,6 +57,6 @@ export const faqItems = [
   {
     question: "Who can participate?",
     answer:
-      "All students of Basaveshwar Engineering College, Bagalkot are eligible to participate. Ensure all 3 members of your team are from the same college and have valid CSN/USN numbers.",
+      "All students of Basaveshwar Engineering College, Bagalkot are eligible to participate. Ensure both members of your team are from the same college and have valid CSN/USN numbers.",
   },
 ];

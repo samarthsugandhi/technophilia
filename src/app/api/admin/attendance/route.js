@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { verifyAdminToken } from "../../../../lib/auth";
 import connectDB from "../../../../lib/mongodb";
 import Team from "../../../../models/Team";
-import { markMockAttendance } from "../../../../lib/adminMockTeams";
 
 export async function POST(req) {
   const authHeader = req.headers.get("Authorization");
@@ -50,27 +49,10 @@ export async function POST(req) {
     }, { status: 200 });
     
   } catch (error) {
-    console.error("POST /api/admin/attendance: database unavailable, trying mock attendance", error);
-    const result = markMockAttendance(registrationId);
-
-    if (result.status === "not_found") {
-      return NextResponse.json({ error: "Team not found" }, { status: 404 });
-    }
-
-    if (result.status === "already_marked") {
-      return NextResponse.json(
-        { error: "Attendance already marked", teamName: result.team.teamName },
-        { status: 400 }
-      );
-    }
-
+    console.error("POST /api/admin/attendance: database unavailable", error);
     return NextResponse.json(
-      {
-        message: "Attendance marked successfully",
-        teamName: result.team.teamName,
-        leaderName: result.team.leader.name,
-      },
-      { status: 200, headers: { "x-admin-data-source": "mock" } }
+      { error: "Database unavailable. Please try again in a moment." },
+      { status: 503 }
     );
   }
 }

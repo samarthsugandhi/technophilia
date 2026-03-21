@@ -6,7 +6,7 @@ import Menu from "../components/Menu/Menu";
 export const metadata = {
   title: "TECHNOPHILIA 3.0 | Event Portal",
   icons: {
-    icon: "/site-icon.png",
+    icon: "/help-svgrepo-com.svg",
   },
 };
 

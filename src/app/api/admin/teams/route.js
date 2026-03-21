@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { verifyAdminToken } from "../../../../lib/auth";
 import connectDB from "../../../../lib/mongodb";
 import Team from "../../../../models/Team";
-import { getMockTeams, updateMockTeam } from "../../../../lib/adminMockTeams";
 
 export async function GET(req) {
   const authHeader = req.headers.get("Authorization");
@@ -19,16 +18,13 @@ export async function GET(req) {
   try {
     await connectDB();
     const teams = await Team.find({}).sort({ createdAt: -1 });
-    return NextResponse.json(teams, {
-      status: 200,
-      headers: { "x-admin-data-source": "database" },
-    });
+    return NextResponse.json(teams, { status: 200 });
   } catch (error) {
-    console.error("GET /api/admin/teams: database unavailable, using seeded teams", error);
-    return NextResponse.json(getMockTeams(), {
-      status: 200,
-      headers: { "x-admin-data-source": "mock" },
-    });
+    console.error("GET /api/admin/teams: database unavailable", error);
+    return NextResponse.json(
+      { error: "Database unavailable. Please try again in a moment." },
+      { status: 503 }
+    );
   }
 }
 
@@ -76,21 +72,12 @@ export async function PATCH(req) {
       return NextResponse.json({ error: "Team not found" }, { status: 404 });
     }
 
-    return NextResponse.json(updatedTeam, {
-      status: 200,
-      headers: { "x-admin-data-source": "database" },
-    });
+    return NextResponse.json(updatedTeam, { status: 200 });
   } catch (error) {
-    console.error("PATCH /api/admin/teams: database unavailable, trying mock update", error);
-    const updatedMockTeam = updateMockTeam(teamId, field, value);
-
-    if (!updatedMockTeam) {
-      return NextResponse.json({ error: "Team not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(updatedMockTeam, {
-      status: 200,
-      headers: { "x-admin-data-source": "mock" },
-    });
+    console.error("PATCH /api/admin/teams: database unavailable", error);
+    return NextResponse.json(
+      { error: "Database unavailable. Please try again in a moment." },
+      { status: 503 }
+    );
   }
 }
