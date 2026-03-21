@@ -19,8 +19,6 @@ const banners = [
 const Reviews = () => {
   const [activeBanner, setActiveBanner] = useState(0);
   const animatingRef = useRef(false);
-  const currentImgRef = useRef(null);
-  const nextImgRef = useRef(null);
   const containerRef = useRef(null);
 
   // Auto-cycle banners every 5 seconds

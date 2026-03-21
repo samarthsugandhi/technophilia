@@ -8,7 +8,7 @@ export function verifyAdminToken(token) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -37,7 +37,7 @@ export const adminAuthMiddleware = (handler) => {
 
       req.admin = decoded;
       return handler(req, res);
-    } catch (error) {
+    } catch {
       return res.status(401).json({ error: 'Unauthorized' });
     }
   };
