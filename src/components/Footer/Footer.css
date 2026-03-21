@@ -131,8 +131,10 @@
 }
 
 @media (max-width: 1000px) {
+  /* Top row: stack contact + nav vertically */
   .footer-row:nth-child(1) {
     flex-direction: column;
+    gap: 2.5em;
   }
 
   .footer-nav {
@@ -143,12 +145,52 @@
     width: 100%;
   }
 
+  /* Big TECHNOPHILIA heading — scale down on mobile */
   .footer-header {
     padding: 1em 0;
   }
 
+  .footer-header h1 {
+    font-size: 18vw;
+  }
+
+  /* Copyright line — stack vertically instead of cramming 3 items */
+  .footer-copyright-line {
+    flex-direction: column;
+    gap: 0.4em;
+    align-items: flex-start;
+    border-top: 1px dashed var(--fg);
+    padding: 0.75em 0;
+  }
+
+  .footer-copyright-line p {
+    text-align: left !important;
+  }
+
+  /* Mentor cards — make sure phone number wraps neatly */
+  .footer-mentor-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4em;
+    padding: 0.75em 0.85em;
+  }
+
+  .footer-mentor-phone {
+    font-size: 0.95rem;
+  }
+
   .footer {
-    padding: 4em 1.25em 1.25em 1.25em;
+    padding: 3em 1.25em 1.5em 1.25em;
     gap: 2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-header h1 {
+    font-size: 20vw;
+  }
+
+  .footer-mentor-name {
+    font-size: 0.85rem;
   }
 }

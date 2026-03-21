@@ -83,7 +83,7 @@
 /* ── single page ────────────────────────────────────── */
 .bk-page {
   flex: 1;
-  padding: 36px 36px 48px;
+  padding: 42px 36px 42px;
   position: relative;
   overflow: hidden;
   border-radius: 0 8px 8px 0;
@@ -115,7 +115,7 @@
       var(--bk-line-color) calc(var(--bk-line-gap) - 1px),
       var(--bk-line-color) var(--bk-line-gap)
     );
-  background-position: 0 72px;
+  background-position: 0 0;
   color: #2a1a0a;
   box-shadow: inset 5px 0 20px rgba(0,0,0,0.08);
 }
@@ -143,13 +143,15 @@
 
 /* ── radio group ─────────────────────────────────────── */
 .bk-radio-group {
-  display: flex; gap: 24px; margin-top: 2px;
+  display: flex; gap: 24px;
+  margin: 0;
 }
 .bk-radio-label {
   display: flex; align-items: center; gap: 8px;
-  font-size: 0.9rem; color: #3a1f08; cursor: pointer;
+  font-size: 1rem; color: #1a0a00; cursor: pointer;
+  font-weight: 500;
 }
-.bk-radio-label input[type="radio"] { accent-color: #6b3d10; }
+.bk-radio-label input[type="radio"] { accent-color: #6b3d10; margin: 0; }
 .bk-req { color: #8b4513; margin-left: 3px; font-size: 0.85em; }
 
 /* ── progress bar ───────────────────────────────────── */
@@ -209,39 +211,44 @@
 
 /* ── form heading ───────────────────────────────────── */
 .bk-head {
-  font-size: 0.78rem; font-weight: 700;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(80,40,10,0.45);
-  border-bottom: 1px solid rgba(80,40,10,0.12);
-  padding: 6px 0 12px;
-  margin: 0 0 16px;
-  min-height: var(--bk-line-gap);
-  line-height: calc(var(--bk-line-gap) - 6px);
+  font-size: 1.1rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: #5c2c0e;
+  border-bottom: none;
+  margin: 0;
+  height: var(--bk-line-gap);
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 6px;
+  box-sizing: border-box;
 }
 
 /* ── fields ─────────────────────────────────────────── */
-.bk-fields { display: flex; flex-direction: column; gap: 2px; }
+.bk-fields { display: flex; flex-direction: column; gap: 0; }
 
 .bk-field {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: var(--bk-line-gap);
-  padding: 2px 0;
+  justify-content: flex-end;
+  height: var(--bk-line-gap);
+  padding: 0 0 2px 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .bk-field label {
-  font-size: 0.65rem; letter-spacing: 1.5px;
-  text-transform: uppercase; color: rgba(80,40,10,0.45);
+  font-size: 0.75rem; letter-spacing: 1.5px;
+  text-transform: uppercase; color: rgba(120,60,20,0.8);
+  font-weight: 600;
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .bk-field input,
 .bk-field select {
   background: transparent;
   border: none;
-  color: #2a1a0a; font-size: 1rem;
+  color: #1a0a00; font-size: 1.15rem; font-weight: 500;
   padding: 0;
   height: 24px;
   line-height: 24px;
@@ -251,7 +258,7 @@
 }
 .bk-field input:focus,
 .bk-field select:focus {
-  color: #1e1207;
+  color: #000;
 }
 .bk-field select {
   cursor: pointer;
@@ -261,18 +268,19 @@
 .bk-field select option { background: #2a1a0a; color: #f6e6cd; }
 
 /* ── review ─────────────────────────────────────────── */
-.bk-review { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.bk-review { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; }
 .bk-review-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  border-bottom: 1px solid rgba(80,40,10,0.08);
-  min-height: var(--bk-line-gap);
-  padding: 4px 0 7px;
-  font-size: 0.84rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: none;
+  height: var(--bk-line-gap);
+  padding: 0 0 4px 0;
+  font-size: 0.95rem;
+  box-sizing: border-box;
 }
-.bk-review-row span { color: rgba(80,40,10,0.45); flex-shrink: 0; margin-right: 12px; }
+.bk-review-row span { color: rgba(120,60,20,0.8); flex-shrink: 0; margin-right: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
 .bk-review-row strong {
-  color: #3a1f08; font-weight: 500;
-  text-align: right; max-width: 60%; word-break: break-word;
+  color: #1a0a00; font-weight: 600;
+  text-align: right; max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 /* ── submit ──────────────────────────────────────────── */
@@ -382,7 +390,7 @@
 /* ── responsive ──────────────────────────────────────── */
 @media (max-width: 520px) {
   .bk-book { width: 92vw; min-height: 500px; }
-  .bk-page { padding: 36px 24px 44px; }
+  .bk-page { padding: 42px 24px 42px; }
   .bk-cover-h1 { font-size: 1.8rem; letter-spacing: 2px; }
   .bk-nav { padding: 8px 12px; }
 }

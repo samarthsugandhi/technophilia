@@ -16,33 +16,35 @@ const About = () => {
       <div className="page about">
         <section className="about-header">
           <h1>Est</h1>
-          <h1>1997</h1>
+          <h1>1963</h1>
         </section>
 
         <section className="about-hero">
           <div className="about-hero-img">
-            <img src="/about/about-hero.jpg" alt="" />
+            <img src="/about/about-hero.png" alt="" />
           </div>
         </section>
 
         <section className="about-me-copy">
           <div className="about-me-copy-wrapper">
             <AnimatedCopy animateOnScroll={true} tag="h3">
-              Welcome to TECHNOPHILIA — exploring technology, intense
-              moments, and the visual language of emotion. My work spans short
-              films, experimental pieces, and cinematic visuals.
+              Basaveshwar Engineering College (BEC), Bagalkot is undergoing
+              unswerving growth since 1963. It started as a private institute
+              with only three Engineering programs and came into Government
+              grant-in-aid code from 1968.
             </AnimatedCopy>
 
             <AnimatedCopy animateOnScroll={true} tag="h3">
-              For me, filmmaking isn’t just about images — it’s about what those
-              images make us feel. I believe in subtlety, texture, and honesty
-              in storytelling.
+              Today, the institute offers 9 undergraduate and 8 post graduate
+              programmes with 10 departments recognized as R&D centers. It is a
+              matter of pride for BEC to be placed in the rank band of 201-250
+              at all India level by NIRF.
             </AnimatedCopy>
 
             <AnimatedCopy animateOnScroll={true} tag="h3">
-              Every project is a new collaboration, a new challenge, and a new
-              chance to create something meaningful. If it moves someone, even
-              for a second — it's done its job.
+              The institution emphasizes teaching-learning, research and
+              administrative processes, stimulating an academic environment for
+              promotion of Quality and excellence in engineering education.
             </AnimatedCopy>
           </div>
         </section>
@@ -52,54 +54,51 @@ const About = () => {
             <div className="services-banner">
               <img src="/about/services-banner.jpg" alt="" />
             </div>
-            <p className="primary">Crafted with Intention</p>
+            <p className="primary">Excellence in Education</p>
           </div>
           <div className="services-col">
             <h4>
-              Every project is a chance to explore new visual language, push
-              creative boundaries, and tell stories that feel real. I approach
-              each film with care, precision, and purpose.
+              To be an institution of excellence in education, research and
+              innovation for sustainable future. We strive to develop globally
+              competent professionals through a culture of innovation.
             </h4>
 
             <div className="services-list">
               <div className="service-list-row">
                 <div className="service-list-col">
-                  <h5>Filmmaking</h5>
+                  <h5>Vision</h5>
                 </div>
                 <div className="service-list-col">
                   <p>
-                    From short films to personal narratives, my work is driven
-                    by emotion and atmosphere. I handle direction,
-                    cinematography, and editing — crafting each piece with a
-                    filmmaker’s eye for mood, movement, and meaning.
+                    To be an institution of excellence in education, research
+                    and innovation for sustainable future. We aim to nurture
+                    talent that transforms the world.
                   </p>
                 </div>
               </div>
 
               <div className="service-list-row">
                 <div className="service-list-col">
-                  <h5>Visual Storytelling</h5>
+                  <h5>Mission</h5>
                 </div>
                 <div className="service-list-col">
                   <p>
-                    I create visuals that speak — whether it’s a quiet moment or
-                    a bold idea. My work blends aesthetic choices with story
-                    clarity, making sure the emotional core always comes
-                    through.
+                    Develop globally competent professionals for future talent
+                    requirements and nurture a culture of research, Innovation
+                    and entrepreneurship while imbibing moral and ethical values.
                   </p>
                 </div>
               </div>
 
               <div className="service-list-row">
                 <div className="service-list-col">
-                  <h5>Creative Direction</h5>
+                  <h5>Collaboration</h5>
                 </div>
                 <div className="service-list-col">
                   <p>
-                    From ideation to final cut, I guide the visual and narrative
-                    tone of every project. I bring a cohesive, cinematic vision
-                    that aligns story, style, and intention — grounded in
-                    authenticity.
+                    Promote collaborations, extension and outreach programs for
+                    addressing industrial and societal needs, fostering
+                    ecological and environmental consciousness in every step.
                   </p>
                 </div>
               </div>
@@ -116,10 +115,10 @@ const About = () => {
         <section className="fav-tools">
           <div className="fav-tools-header">
             <AnimatedCopy tag="p" animateOnScroll={true} className="primary sm">
-              Daily Stack
+              Institutional Growth
             </AnimatedCopy>
             <AnimatedCopy tag="h2" animateOnScroll={true} delay={0.25}>
-              Favourite Tools
+              Major Credentials
             </AnimatedCopy>
             <AnimatedCopy
               tag="p"
@@ -127,8 +126,9 @@ const About = () => {
               className="secondary"
               delay={0.5}
             >
-              My favorite stack includes Framer, Figma, and other cutting-edge
-              technologies to ensure seamless and dynamic designs.
+              Recognized by National Project Implementation Unit (NPIU) and
+              awarded multiple TEQIP grants for excellence in R&D and academic
+              growth.
             </AnimatedCopy>
           </div>
 
@@ -138,22 +138,22 @@ const About = () => {
                 <div className="fav-tool-img">
                   <img src="/about/tool-1.jpg" alt="" />
                 </div>
-                <h4>DaVinci Resolve</h4>
-                <p className="primary sm">Color Grading</p>
+                <h4>TEQIP Supported</h4>
+                <p className="primary sm">Academic Excellence</p>
               </div>
               <div className="fav-tool">
                 <div className="fav-tool-img">
                   <img src="/about/tool-2.jpg" alt="" />
                 </div>
-                <h4>Adobe Premiere Pro</h4>
-                <p className="primary sm">Video Editing</p>
+                <h4>NIRF Ranked</h4>
+                <p className="primary sm">National Level Rank</p>
               </div>
               <div className="fav-tool">
                 <div className="fav-tool-img">
                   <img src="/about/tool-3.jpg" alt="" />
                 </div>
-                <h4>Blackmagic Pocket</h4>
-                <p className="primary sm">Cinematic Shooting</p>
+                <h4>IDEA Lab</h4>
+                <p className="primary sm">Innovation Center</p>
               </div>
             </div>
             <div className="fav-tools-list-row">
@@ -161,22 +161,22 @@ const About = () => {
                 <div className="fav-tool-img">
                   <img src="/about/tool-4.jpg" alt="" />
                 </div>
-                <h4>ShotDeck</h4>
-                <p className="primary sm">Visual References</p>
+                <h4>Incubation Center</h4>
+                <p className="primary sm">Entrepreneurship</p>
               </div>
               <div className="fav-tool">
                 <div className="fav-tool-img">
                   <img src="/about/tool-5.jpg" alt="" />
                 </div>
-                <h4>Frame.io</h4>
-                <p className="primary sm">Remote Collaboration</p>
+                <h4>NBA Accredited</h4>
+                <p className="primary sm">Quality Assurance</p>
               </div>
               <div className="fav-tool">
                 <div className="fav-tool-img">
                   <img src="/about/tool-6.jpg" alt="" />
                 </div>
-                <h4>Celtx</h4>
-                <p className="primary sm">Scriptwriting Tool</p>
+                <h4>UGC Autonomous</h4>
+                <p className="primary sm">Academic Freedom</p>
               </div>
             </div>
           </div>

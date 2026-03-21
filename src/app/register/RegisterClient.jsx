@@ -452,9 +452,9 @@ const RegisterClient = () => {
                 <div className="bk-fields">
                   <F label="Team Name" name="teamName" value={formData.teamName} required
                     onChange={e => setFormData(p => ({...p, teamName: e.target.value}))} />
-                  <div className="bk-field">
+                  <div className="bk-field" style={{ height: "calc(var(--bk-line-gap) * 3)", justifyContent: "flex-start", paddingTop: "8px" }}>
                     <label>Competition Format</label>
-                    <p style={{ margin: 0, color: "#666", lineHeight: 1.6 }}>
+                    <p style={{ margin: 0, color: "#4a2c16", lineHeight: "26px", fontSize: "0.95rem", fontWeight: "500" }}>
                       Single registration for TECHNOPHILIA 3.0. All teams compete across 7 technical themes.
                       Shortlisted teams play 5 rounds, then finalists compete in the last 2 rounds for winner announcement.
                     </p>
