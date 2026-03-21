@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/components/Transition/Transition.css"],"sourcesContent":[".blocks-container {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  display: flex;\n  flex-direction: column;\n  pointer-events: none;\n  z-index: 10000000;\n}\n\n.row {\n  flex: 1;\n  width: 100%;\n  display: flex;\n}\n\n.block {\n  position: relative;\n  flex: 1;\n  background: var(--bg);\n  margin: -0.25px;\n}\n\n.transition-in .block {\n  transform-origin: top;\n}\n\n.transition-out .block {\n  transform-origin: bottom;\n}\n"],"names":[],"mappings":"AAAA;;;;;;;;;;;;AAYA;;;;;;AAMA;;;;;;;AAOA;;;;AAIA"}}]
-}

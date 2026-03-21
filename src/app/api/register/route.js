@@ -4,6 +4,11 @@ import { z } from "zod";
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 
+function generateRegistrationId() {
+  const randomHex = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `TECH2026-${randomHex}`;
+}
+
 const memberSchema = z.object({
   name: z.string().min(1, "Name is required"),
   semester: z.string().min(1, "Semester is required"),
@@ -31,22 +36,22 @@ const registerSchema = z.object({
   members: z.array(memberSchema).length(2, "Must securely have exactly 2 members"),
 }).superRefine((data, ctx) => {
   const requiresCSN = (semester) => semester === "1st Sem" || semester === "2nd Sem";
-  const isCSN = (value) => String(value || "").trim().toUpperCase().startsWith("CSN");
-  const isUSN = (value) => String(value || "").trim().toUpperCase().startsWith("USN");
+  const isCSN = (value) => /^\d{10}$/.test(String(value || "").trim());
+  const isUSN = (value) => /^2BA\d{2}[A-Z]{2}\d{3}$/i.test(String(value || "").trim());
 
   const leaderNeedsCSN = requiresCSN(data.leader.semester);
   if (leaderNeedsCSN && !isCSN(data.leader.usn)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["leader", "usn"],
-      message: "Leader must use CSN for 1st/2nd semester",
+      message: "Leader CSN must be a valid 10-digit number",
     });
   }
   if (!leaderNeedsCSN && !isUSN(data.leader.usn)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["leader", "usn"],
-      message: "Leader must use USN for 3rd-8th semester",
+      message: "Leader USN must be in format 2BA23IS080",
     });
   }
 
@@ -56,14 +61,14 @@ const registerSchema = z.object({
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["members", index, "usn"],
-        message: `Member ${index + 2} must use CSN for 1st/2nd semester`,
+        message: `Member ${index + 2} CSN must be a valid 10-digit number`,
       });
     }
     if (!memberNeedsCSN && !isUSN(member.usn)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["members", index, "usn"],
-        message: `Member ${index + 2} must use USN for 3rd-8th semester`,
+        message: `Member ${index + 2} USN must be in format 2BA23IS080`,
       });
     }
   });
@@ -105,30 +110,83 @@ export async function POST(req) {
     }
 
     // Connect to DB
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (dbError) {
+      console.error("Registration DB connection failed:", dbError);
+      return NextResponse.json(
+        { error: "Database unavailable. Please try again in a moment." },
+        { status: 503 }
+      );
+    }
 
-    // Generate unique TECH ID
-    const randomHex = crypto.randomBytes(2).toString("hex").toUpperCase();
-    const registrationId = `TECH2026-${randomHex}`;
+    // Create Team (retry if registrationId collides)
+    let savedTeam = null;
+    let registrationId = "";
 
-    // Create Team
-    const newTeam = new Team({
-      ...payload,
-      registrationId,
-      qrCode: registrationId,
-    });
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      registrationId = generateRegistrationId();
 
-    // Mongoose pre-save throws error on validation / dupe checks
-    await newTeam.save();
+      try {
+        const newTeam = new Team({
+          ...payload,
+          registrationId,
+          qrCode: registrationId,
+        });
+
+        // Mongoose pre-save throws error on validation / dupe checks
+        savedTeam = await newTeam.save();
+        break;
+      } catch (saveError) {
+        const isRegistrationIdCollision =
+          saveError?.code === 11000 && saveError?.keyPattern?.registrationId;
+
+        if (isRegistrationIdCollision) {
+          continue;
+        }
+
+        throw saveError;
+      }
+    }
+
+    if (!savedTeam) {
+      return NextResponse.json(
+        { error: "Failed to generate unique registration ID. Please retry." },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json({
       message: "Registration successful",
       registrationId,
-      teamId: newTeam._id,
+      teamId: savedTeam._id,
     }, { status: 201 });
 
   } catch (error) {
     console.error("Registration API Error:", error);
+
+    if (error?.code === 11000) {
+      if (error?.keyPattern?.registrationId) {
+        return NextResponse.json(
+          { error: "Registration ID collision. Please retry registration." },
+          { status: 409 }
+        );
+      }
+
+      if (error?.keyPattern?.["leader.email"] || error?.keyPattern?.["members.email"]) {
+        return NextResponse.json(
+          { error: "Email already registered globally. Please change and retry." },
+          { status: 409 }
+        );
+      }
+
+      if (error?.keyPattern?.["leader.usn"] || error?.keyPattern?.["members.usn"]) {
+        return NextResponse.json(
+          { error: "USN/CSN already registered globally. Please change and retry." },
+          { status: 409 }
+        );
+      }
+    }
     
     if (error.status === 409 || error.message.includes("registered") || error.message.includes("Duplicate")) {
       return NextResponse.json({ error: error.message }, { status: 409 });

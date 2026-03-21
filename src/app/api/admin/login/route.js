@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { validateAdminCredentials, generateAdminToken } from "@/lib/auth";
+import { validateAdminCredentials, generateAdminToken } from "../../../../lib/auth";
 
 export async function POST(req) {
   try {
@@ -31,7 +31,7 @@ export async function POST(req) {
       { token, email, message: "Login successful" },
       { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Login failed" },
       { status: 500 }

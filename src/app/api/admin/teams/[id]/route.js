@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import Team from "@/models/Team";
-import { verifyAdminToken } from "@/lib/auth";
+import connectDB from "../../../../../lib/mongodb";
+import Team from "../../../../../models/Team";
+import { verifyAdminToken } from "../../../../../lib/auth";
+import { deleteMockTeam } from "../../../../../lib/adminMockTeams";
 
 export async function DELETE(req, { params }) {
+  const { id } = params;
+
   try {
     // Verify admin token
     const authHeader = req.headers.get("Authorization");
@@ -20,8 +23,6 @@ export async function DELETE(req, { params }) {
 
     await connectDB();
 
-    const { id } = params;
-
     // Find and delete team
     const team = await Team.findById(id);
     if (!team) {
@@ -35,10 +36,19 @@ export async function DELETE(req, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("DELETE /api/admin/teams/[id]:", error);
+    console.error("DELETE /api/admin/teams/[id]: database unavailable, trying mock delete", error);
+
+    const deleted = deleteMockTeam(id);
+    if (!deleted) {
+      return NextResponse.json(
+        { error: "Team not found" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { message: "Mock team deleted successfully", deletedId: id },
+      { status: 200, headers: { "x-admin-data-source": "mock" } }
     );
   }
 }

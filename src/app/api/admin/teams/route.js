@@ -1,46 +1,96 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { verifyAdminToken } from "../../../../lib/auth";
 import connectDB from "../../../../lib/mongodb";
 import Team from "../../../../models/Team";
+import { getMockTeams, updateMockTeam } from "../../../../lib/adminMockTeams";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+export async function GET(req) {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const token = authHeader.substring(7);
+  const decoded = verifyAdminToken(token);
+  if (!decoded) {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
   try {
     await connectDB();
     const teams = await Team.find({}).sort({ createdAt: -1 });
-    return NextResponse.json(teams, { status: 200 });
-  } catch {
-    return NextResponse.json({ error: "Failed to fetch teams" }, { status: 500 });
+    return NextResponse.json(teams, {
+      status: 200,
+      headers: { "x-admin-data-source": "database" },
+    });
+  } catch (error) {
+    console.error("GET /api/admin/teams: database unavailable, using seeded teams", error);
+    return NextResponse.json(getMockTeams(), {
+      status: 200,
+      headers: { "x-admin-data-source": "mock" },
+    });
   }
 }
 
 export async function PATCH(req) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const token = authHeader.substring(7);
+  const decoded = verifyAdminToken(token);
+  if (!decoded) {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+  }
+
+  let payload;
   try {
-    const { teamId, field, value } = await req.json(); // field can be 'shortlisted' or 'winner'
-    
-    if (!['shortlisted', 'winner'].includes(field)) {
-      return NextResponse.json({ error: "Invalid field update" }, { status: 400 });
+    payload = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const { teamId, field, value } = payload;
+  if (!['shortlisted', 'winner', 'firstRunnerUp', 'secondRunnerUp', 'attendanceMarked'].includes(field)) {
+    return NextResponse.json({ error: "Invalid field update" }, { status: 400 });
+  }
+
+  try {
+    await connectDB();
+
+    const updatePayload = { [field]: value };
+    if (value === true && ["winner", "firstRunnerUp", "secondRunnerUp"].includes(field)) {
+      if (field !== "winner") updatePayload.winner = false;
+      if (field !== "firstRunnerUp") updatePayload.firstRunnerUp = false;
+      if (field !== "secondRunnerUp") updatePayload.secondRunnerUp = false;
     }
 
-    await connectDB();
     const updatedTeam = await Team.findByIdAndUpdate(
       teamId, 
-      { [field]: value }, 
+      updatePayload,
       { new: true }
     );
 
-    return NextResponse.json(updatedTeam, { status: 200 });
-  } catch {
-    return NextResponse.json({ error: "Update failed" }, { status: 500 });
+    if (!updatedTeam) {
+      return NextResponse.json({ error: "Team not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedTeam, {
+      status: 200,
+      headers: { "x-admin-data-source": "database" },
+    });
+  } catch (error) {
+    console.error("PATCH /api/admin/teams: database unavailable, trying mock update", error);
+    const updatedMockTeam = updateMockTeam(teamId, field, value);
+
+    if (!updatedMockTeam) {
+      return NextResponse.json({ error: "Team not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedMockTeam, {
+      status: 200,
+      headers: { "x-admin-data-source": "mock" },
+    });
   }
 }

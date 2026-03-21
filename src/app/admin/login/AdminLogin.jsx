@@ -33,7 +33,7 @@ export default function AdminLogin() {
 
       localStorage.setItem("adminToken", data.token);
       router.push("/admin/dashboard");
-    } catch (err) {
+    } catch {
       setError("Network error. Please try again.");
       setLoading(false);
     }

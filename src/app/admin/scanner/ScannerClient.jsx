@@ -1,17 +1,30 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import Transition from "../../../components/Transition/Transition";
 
 const ScannerClient = () => {
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [token, setToken] = useState("");
+  const [status, setStatus] = useState("loading"); // loading, authenticated, unauthenticated
   const [manualId, setManualId] = useState("");
   const [scanResult, setScanResult] = useState({ state: "idle", message: "" });
   const scannerRef = useRef(null);
   const flashOverlayRef = useRef(null);
   const isScanningRef = useRef(false);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("adminToken");
+    if (!storedToken) {
+      setStatus("unauthenticated");
+      router.push("/admin/login");
+      return;
+    }
+    setToken(storedToken);
+    setStatus("authenticated");
+  }, [router]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -49,7 +62,10 @@ const ScannerClient = () => {
     try {
       const res = await fetch("/api/admin/attendance", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
         body: JSON.stringify({ registrationId })
       });
 
@@ -92,8 +108,8 @@ const ScannerClient = () => {
   };
 
   if (status === "loading") return <div style={{ color: "white", padding: "50px", textAlign: "center" }}>Loading Optics...</div>;
-  if (!session) {
-    return <div style={{ color: "white", padding: "50px", textAlign: "center" }}><h2>Restricted Area</h2><button onClick={() => signIn()}>Access Term</button></div>;
+  if (status === "unauthenticated") {
+    return <div style={{ color: "white", padding: "50px", textAlign: "center" }}><h2>Restricted Area</h2><button onClick={() => router.push("/admin/login")}>Access Term</button></div>;
   }
 
   return (

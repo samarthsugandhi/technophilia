@@ -24,6 +24,28 @@
   z-index: 1;
 }
 
+.hero-register-btn {
+  margin-top: 36px;
+  padding: 14px 38px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5d38a, #c9953c);
+  color: #151515;
+  border: 1px solid rgba(255, 223, 148, 0.7);
+  font-size: 1.02rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.hero-register-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
 .hero-header h1 {
   color: var(--bg);
   line-height: 1;
@@ -124,6 +146,138 @@
   border-radius: 1em;
 }
 
+.live-section {
+  padding: 100px 5vw;
+}
+
+.shortlisted-live-section {
+  background: #050505;
+  border-top: 1px solid #222;
+}
+
+.live-title {
+  font-size: 3rem;
+  color: #fff;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.live-shortlisted-item {
+  padding: 25px;
+  background: linear-gradient(135deg, #121212, #0a0a0a);
+  border: 1px solid #2d2d2d;
+  border-left: 4px solid #f7e7c8;
+}
+
+.live-shortlisted-item h3 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.35rem;
+  color: #f4f4f4;
+}
+
+.live-shortlisted-item p {
+  color: #a0a0a0;
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+}
+
+.winners-live-section {
+  background: #0a0a00;
+  border-top: 1px solid #3d3200;
+}
+
+.winners-title {
+  font-size: 4rem;
+  color: gold;
+  margin-bottom: 40px;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+  text-transform: uppercase;
+}
+
+.winner-legend {
+  margin: -8px 0 26px;
+  color: #dacd92;
+  font-size: 0.9rem;
+  letter-spacing: 0.6px;
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.live-winner-item {
+  padding: 36px;
+  background: linear-gradient(135deg, #151515, #292000);
+  border: 1px solid rgba(255, 215, 0, 0.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.winner-rank-pill {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(255, 215, 0, 0.16);
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  color: #ffe89a;
+}
+
+.live-winner-item h3 {
+  margin: 0;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.winner-names {
+  color: #d7d7d7;
+  margin-top: 16px;
+  font-size: 1.08rem;
+}
+
+.winner-names .teammate-name {
+  color: #ffdf64;
+  font-weight: 700;
+}
+
+.floating-register-btn {
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  z-index: 9999;
+  padding: 16px 32px;
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+
+.floating-register-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.7);
+}
+
 @media (max-width: 1000px) {
   .hero,
   .sticky-titles,
@@ -155,6 +309,25 @@
 
   .hobby {
     aspect-ratio: 5/3;
+  }
+
+  .live-title {
+    font-size: 2rem;
+  }
+
+  .winners-title {
+    font-size: 2.4rem;
+  }
+
+  .live-winner-item h3 {
+    font-size: 1.7rem;
+  }
+
+  .floating-register-btn {
+    right: 16px;
+    bottom: 20px;
+    padding: 12px 18px;
+    font-size: 0.74rem;
   }
 }
 

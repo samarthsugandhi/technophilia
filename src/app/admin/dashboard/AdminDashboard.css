@@ -92,6 +92,35 @@
   padding: 40px;
 }
 
+.admin-status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.admin-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.admin-banner-warning {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.admin-banner-error {
+  color: #fda4af;
+  background: rgba(225, 29, 72, 0.12);
+  border-color: rgba(225, 29, 72, 0.4);
+}
+
 .admin-section {
   background: #111;
   border: 1px solid #333;
@@ -141,6 +170,32 @@
   padding: 16px;
   border-bottom: 1px solid #222;
   align-items: center;
+}
+
+.team-cell {
+  display: contents;
+}
+
+.cell-label {
+  display: none;
+  color: #8c8c8c;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.cell-value {
+  color: #f2f2f2;
+}
+
+.teams-empty {
+  margin-top: 14px;
+  border: 1px dashed #333;
+  padding: 18px;
+  border-radius: 8px;
+  color: #999;
+  text-align: center;
 }
 
 .teams-header {
@@ -268,6 +323,20 @@
   font-size: 0.85rem;
 }
 
+.winner-rank {
+  margin: 4px 0 12px;
+  color: #d6b883;
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.winner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .btn-shortlist,
 .btn-winner {
   width: 100%;
@@ -301,10 +370,104 @@
   color: #c8a97a;
 }
 
-.export-buttons {
+.attendance-mode-switch {
   display: flex;
-  gap: 16px;
   flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.attendance-card {
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.attendance-qr-reader {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.attendance-help {
+  color: #a1a1a1;
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+}
+
+.attendance-manual-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.attendance-manual-form input {
+  flex: 1;
+  min-width: 280px;
+  background: #050505;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 6px;
+  outline: none;
+}
+
+.attendance-manual-form input:focus {
+  border-color: #777;
+}
+
+.attendance-toast {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  border: 1px solid #2d2d2d;
+  background: #0a0a0a;
+  color: #b5b5b5;
+}
+
+.attendance-toast.loading {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.attendance-toast.success {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.5);
+}
+
+.attendance-toast.error {
+  color: #fb7185;
+  border-color: rgba(251, 113, 133, 0.45);
+}
+
+.export-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+.export-group {
+  border: 1px solid #303030;
+  background: #0a0a0a;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.export-group h4 {
+  margin: 0 0 12px;
+  color: #d6d6d6;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.export-group > div {
+  display: flex;
+  gap: 10px;
 }
 
 .btn-export {
@@ -327,12 +490,20 @@
 
 .admin-loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 14px;
   min-height: 100vh;
   background: #0a0a0a;
   color: #fff;
   font-size: 1.5rem;
+}
+
+.admin-loading-error {
+  color: #fda4af;
+  padding: 20px;
+  text-align: center;
 }
 
 @media (max-width: 1024px) {
@@ -361,17 +532,75 @@
 }
 
 @media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .admin-header-left h1 {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    line-height: 1.3;
+  }
+
+  .admin-logout-btn {
+    width: 100%;
+  }
+
   .admin-content {
-    padding: 20px;
+    padding: 16px;
   }
 
   .admin-section {
-    padding: 20px;
+    padding: 16px;
+    border-radius: 10px;
   }
 
-  .teams-header,
   .teams-row {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 10px;
+    border: 1px solid #252525;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding: 14px;
+    background: #0b0b0b;
+  }
+
+  .teams-header {
+    display: none;
+  }
+
+  .team-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cell-label {
+    display: inline-flex;
+  }
+
+  .team-status {
+    gap: 6px;
+  }
+
+  .shortlist-grid,
+  .winners-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-export {
+    width: 100%;
+    text-align: center;
+  }
+
+  .attendance-manual-form input {
+    min-width: 100%;
+  }
+
+  .export-group > div {
+    flex-direction: column;
   }
 }

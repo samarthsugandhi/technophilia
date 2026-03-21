@@ -29,6 +29,8 @@ const teamSchema = new mongoose.Schema({
   attendanceMarked: { type: Boolean, default: false },
   shortlisted: { type: Boolean, default: false },
   winner: { type: Boolean, default: false },
+  firstRunnerUp: { type: Boolean, default: false },
+  secondRunnerUp: { type: Boolean, default: false },
 }, { timestamps: true });
 
 function arrayLimit(val) {
@@ -36,9 +38,14 @@ function arrayLimit(val) {
 }
 
 // Global Uniqueness Check
-teamSchema.pre('save', async function(next) {
-  const usns = [this.leader.usn, ...this.members.map(m => m.usn)];
-  const emails = [this.leader.email, ...this.members.map(m => m.email)];
+teamSchema.pre('save', async function() {
+  const members = Array.isArray(this.members) ? this.members : [];
+  const usns = [this.leader?.usn, ...members.map((m) => m?.usn)]
+    .map((v) => String(v || '').trim().toUpperCase())
+    .filter(Boolean);
+  const emails = [this.leader?.email, ...members.map((m) => m?.email)]
+    .map((v) => String(v || '').trim().toLowerCase())
+    .filter(Boolean);
   
   // Check internal uniqueness
   if ((new Set(usns)).size !== usns.length) {
@@ -53,7 +60,7 @@ teamSchema.pre('save', async function(next) {
   }
 
   // Check global DB uniqueness
-  const existingUSN = await mongoose.models.Team.findOne({
+  const existingUSN = await this.constructor.findOne({
     $or: [
       { "leader.usn": { $in: usns } },
       { "members.usn": { $in: usns } }
@@ -67,7 +74,7 @@ teamSchema.pre('save', async function(next) {
     throw e;
   }
 
-  const existingEmail = await mongoose.models.Team.findOne({
+  const existingEmail = await this.constructor.findOne({
     $or: [
       { "leader.email": { $in: emails } },
       { "members.email": { $in: emails } }
@@ -81,7 +88,6 @@ teamSchema.pre('save', async function(next) {
     throw e;
   }
 
-  next();
 });
 
 const Team = mongoose.models.Team || mongoose.model('Team', teamSchema);

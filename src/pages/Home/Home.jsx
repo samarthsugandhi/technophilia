@@ -52,39 +52,35 @@ const Home = () => {
   useEffect(() => {
     const eventLineup = homeWorkRef.current;
     const eventHeader = stickyWorkHeaderRef.current;
-    if (!eventLineup) return;
+    if (!eventLineup && !eventHeader) return;
 
-    const show = ([entry]) => {
-      if (entry.isIntersecting) setShowRegisterBtn(true);
-    };
-    const hide = ([entry]) => {
-      if (entry.isIntersecting) setShowRegisterBtn(false);
+    let inHeader = false;
+    let inLineup = false;
+
+    const syncVisibility = () => {
+      setShowRegisterBtn(inHeader || inLineup);
     };
 
-    // Show when Event Lineup enters
-    const lineupObserver = new IntersectionObserver(show, { threshold: 0.05 });
-    // Also watch the header that precedes it
+    const lineupObserver = eventLineup
+      ? new IntersectionObserver(([entry]) => {
+          inLineup = Boolean(entry?.isIntersecting);
+          syncVisibility();
+        }, { threshold: 0.08 })
+      : null;
+
     const headerObserver = eventHeader
-      ? new IntersectionObserver(show, { threshold: 0.05 })
-      : null;
-    // Hide when hero (top) or contact (bottom) are visible
-    const heroObserver = heroRef.current
-      ? new IntersectionObserver(hide, { threshold: 0.1 })
-      : null;
-    const contactObserver = contactRef.current
-      ? new IntersectionObserver(hide, { threshold: 0.05 })
+      ? new IntersectionObserver(([entry]) => {
+          inHeader = Boolean(entry?.isIntersecting);
+          syncVisibility();
+        }, { threshold: 0.08 })
       : null;
 
-    lineupObserver.observe(eventLineup);
+    if (lineupObserver && eventLineup) lineupObserver.observe(eventLineup);
     if (headerObserver && eventHeader) headerObserver.observe(eventHeader);
-    if (heroObserver && heroRef.current) heroObserver.observe(heroRef.current);
-    if (contactObserver && contactRef.current) contactObserver.observe(contactRef.current);
 
     return () => {
-      lineupObserver.disconnect();
+      lineupObserver?.disconnect();
       headerObserver?.disconnect();
-      heroObserver?.disconnect();
-      contactObserver?.disconnect();
     };
   }, []);
 
@@ -214,7 +210,7 @@ const Home = () => {
             <AnimatedCopy tag="h2" animateOnScroll={false} delay={0.9} style={{ color: '#aaa', marginTop: '20px', fontFamily: 'monospace', fontSize: '2rem' }}>
               {timeLeft.days}D : {String(timeLeft.hours).padStart(2,'0')}H : {String(timeLeft.mins).padStart(2,'0')}M : {String(timeLeft.secs).padStart(2,'0')}S
             </AnimatedCopy>
-            <Link href="/register" style={{ marginTop: '40px', padding: '15px 40px', background: '#000', color: '#fff', border: '1px solid #fff', fontSize: '1.2rem', fontWeight: 'bold', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '2px', transition: 'background 0.3s, color 0.3s' }} onMouseEnter={(e) => { e.target.style.background = '#fff'; e.target.style.color = '#000'; }} onMouseLeave={(e) => { e.target.style.background = '#000'; e.target.style.color = '#fff'; }}>
+            <Link href="/register" className="hero-register-btn">
               REGISTER NOW
             </Link>
           </div>
@@ -268,13 +264,13 @@ const Home = () => {
         </section>
 
         {liveData?.shortlisted?.length > 0 && (
-          <section className="live-section" style={{ padding: '100px 5vw', background: '#050505', borderTop: '1px solid #222' }}>
-            <AnimatedCopy tag="h2" animateOnScroll={true} style={{ fontSize: '3rem', color: '#fff', marginBottom: '40px', textTransform: 'uppercase' }}>Shortlisted Teams</AnimatedCopy>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+          <section className="live-section shortlisted-live-section">
+            <AnimatedCopy tag="h2" animateOnScroll={true} className="live-title">Shortlisted Teams</AnimatedCopy>
+            <div className="live-grid">
               {liveData.shortlisted.map((st, i) => (
-                <div key={i} className="live-shortlisted-item" style={{ padding: '25px', background: '#111', border: '1px solid #333', borderLeft: '4px solid #fff' }}>
-                  <h3 style={{ margin: 0, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '1.4rem' }}>{st.teamName}</h3>
-                  <p style={{ color: '#888', margin: '10px 0 0', fontSize: '0.9rem' }}>{st.leader.branch}</p>
+                <div key={i} className="live-shortlisted-item">
+                  <h3>{st.teamName}</h3>
+                  <p>{st.registrationId || "Registration ID pending"}</p>
                 </div>
               ))}
             </div>
@@ -282,14 +278,23 @@ const Home = () => {
         )}
 
         {liveData?.winners?.length > 0 && (
-          <section className="live-section" style={{ padding: '100px 5vw', background: '#0a0a00', borderTop: '1px solid #330' }}>
-            <AnimatedCopy tag="h2" animateOnScroll={true} style={{ fontSize: '4rem', color: 'gold', marginBottom: '40px', textShadow: '0 0 20px rgba(255,215,0,0.3)', textTransform: 'uppercase' }}>★ WINNERS ★</AnimatedCopy>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '30px' }}>
+          <section className="live-section winners-live-section">
+            <AnimatedCopy tag="h2" animateOnScroll={true} className="winners-title">★ Winner Announcement ★</AnimatedCopy>
+            <p className="winner-legend">1st = Winner, 2nd = 1st Runner-up, 3rd = 2nd Runner-up</p>
+            <div className="winners-grid">
               {liveData.winners.map((win, i) => (
-                <div key={i} className="live-winner-item" style={{ padding: '40px', background: 'linear-gradient(135deg, #111, #220)', border: '1px solid gold', position: 'relative', overflow: 'hidden' }}>
-                  <h3 style={{ margin: 0, fontSize: '3rem', textTransform: 'uppercase', color: '#fff', zIndex: 2, position: 'relative' }}>{win.teamName}</h3>
-                  <div style={{ color: '#ccc', marginTop: '20px', zIndex: 2, position: 'relative', fontSize: '1.2rem' }}>
-                    <span style={{color: 'gold', fontWeight: 'bold'}}>{win.leader.name}</span> & {win.members.map(m=>m.name).join(' & ')}
+                <div key={`${win.teamName}-${i}`} className="live-winner-item">
+                  <span className="winner-rank-pill">{win.awardLabel || "Winner"}</span>
+                  <h3>{win.teamName}</h3>
+                  <div className="winner-names">
+                    {[win.leader?.name, ...(win.members || []).map((m) => m.name)]
+                      .filter(Boolean)
+                      .map((name, idx, arr) => (
+                        <React.Fragment key={`${win.teamName}-${name}-${idx}`}>
+                          <span className="teammate-name">{name}</span>
+                          {idx < arr.length - 1 ? " & " : ""}
+                        </React.Fragment>
+                      ))}
                   </div>
                 </div>
               ))}
@@ -300,26 +305,7 @@ const Home = () => {
         {showRegisterBtn && (
           <Link
             href="/register"
-            style={{
-              position: 'fixed',
-              bottom: '36px',
-              right: '36px',
-              zIndex: 9999,
-              padding: '16px 32px',
-              background: '#fff',
-              color: '#000',
-              fontWeight: 'bold',
-              fontSize: '0.85rem',
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              borderRadius: '2px',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              animation: 'fadeSlideUp 0.4s ease forwards',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 14px 40px rgba(0,0,0,0.7)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 8px 30px rgba(0,0,0,0.5)'; }}
+            className="floating-register-btn"
           >
             REGISTER NOW
           </Link>
