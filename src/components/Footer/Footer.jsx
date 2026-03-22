@@ -86,8 +86,8 @@ const Footer = () => {
             <span>&#8594;</span>
           </Link>
 
-          <Link href="/about" className="footer-nav-item">
-            <span>About</span>
+          <Link href="/#events" className="footer-nav-item">
+            <span>Events</span>
             <span>&#8594;</span>
           </Link>
 
