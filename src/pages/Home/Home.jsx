@@ -278,7 +278,7 @@ const Home = () => {
           </AnimatedCopy>
         </section>
 
-        <section ref={homeWorkRef} className="home-work">
+        <section ref={homeWorkRef} className="home-work" id="events">
           <div className="home-work-list">
             {workItems.map((work, index) => (
               <div
