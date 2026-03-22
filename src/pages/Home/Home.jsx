@@ -31,6 +31,26 @@ const Home = () => {
   const homeWorkRef = useRef(null);
   const contactRef = useRef(null);
   const [showRegisterBtn, setShowRegisterBtn] = useState(false); // hidden by default
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [savedScroll, setSavedScroll] = useState(0);
+  
+  const handleEventClick = (work) => {
+    setSavedScroll(window.scrollY);
+    setSelectedEvent(work);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      ScrollTrigger.refresh();
+    }, 10);
+  };
+
+  const handleBack = () => {
+    setSelectedEvent(null);
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+      window.scrollTo(0, savedScroll);
+    }, 10);
+  };
+  
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -213,7 +233,8 @@ const Home = () => {
   return (
     <ReactLenis root>
       <div className="page home">
-        <section ref={heroRef} className="hero">
+        <div style={{ display: selectedEvent ? 'none' : 'block', width: '100%' }}>
+          <section ref={heroRef} className="hero">
           <div className="hero-img">
             <img src="/home/hero.png" alt="" />
           </div>
@@ -244,7 +265,7 @@ const Home = () => {
             Where coders, builders, and problem-solvers collide.
           </h2>
           <h2 ref={(el) => (titlesRef.current[1] = el)}>
-            7 events. 2 days. One massive prize pool awaits.
+            6 events. 2 days. One massive prize pool awaits.
           </h2>
           <h2 ref={(el) => (titlesRef.current[2] = el)}>
             Register your team. Enter the arena. Own TECHNOPHILIA 3.0.
@@ -260,10 +281,11 @@ const Home = () => {
         <section ref={homeWorkRef} className="home-work">
           <div className="home-work-list">
             {workItems.map((work, index) => (
-              <Link
-                href="/register"
+              <div
                 key={work.id}
                 className="home-work-item"
+                onClick={() => handleEventClick(work)}
+                style={{ cursor: 'pointer' }}
               >
                 <p className="primary sm">{`${String(index + 1).padStart(
                   2,
@@ -273,7 +295,7 @@ const Home = () => {
                 <div className="work-item-img">
                   <img src={work.image} alt={work.title} />
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </section>
@@ -317,7 +339,7 @@ const Home = () => {
           </section>
         )}
 
-        {showRegisterBtn && (
+        {showRegisterBtn && !selectedEvent && (
           <Link
             href="/register"
             className="floating-register-btn"
@@ -331,6 +353,64 @@ const Home = () => {
           <ContactForm />
           <Footer />
         </div>
+
+        </div>
+
+        {selectedEvent && (
+          <div className="event-details-page-view" style={{ width: '100%', minHeight: '100vh', backgroundColor: '#fff', color: '#000', padding: '60px 0' }}>
+            <div className="event-details-container">
+              <button 
+                className="back-btn-new" 
+                onClick={handleBack}
+              >
+                <span className="back-arrow">←</span> Back to Events
+              </button>
+              
+              <div className="event-details-content">
+                <div className="event-details-img">
+                  <img src={selectedEvent.image} alt={selectedEvent.title} />
+                </div>
+                <div className="event-details-text">
+                  <h2 className="event-details-title">{selectedEvent.title}</h2>
+                  <div className="event-description">
+                    {selectedEvent.description || "Description coming soon..."}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {(() => {
+              const currentIndex = workItems.findIndex(w => w.id === selectedEvent.id);
+              const isLastEvent = currentIndex === workItems.length - 1;
+              const nextEvent = workItems[(currentIndex + 1) % workItems.length];
+              
+              if (isLastEvent) {
+                return (
+                  <div className="next-event-section final-register-section">
+                    <div className="final-register-content">
+                      <div className="final-register-glow"></div>
+                      <h2 className="next-event-title final-register-title">READY TO COMPETE?</h2>
+                      <p className="final-register-subtitle">Join the ultimate tech showdown. Prove your skills and win huge prizes.</p>
+                      <Link href="/register" className="register-btn-event final-register-btn">
+                        REGISTER YOUR TEAM NOW
+                        <span className="btn-arrow">→</span>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div className="next-event-section">
+                  <h2 className="next-event-title">NEXT</h2>
+                  <div className="next-event-card" onClick={() => handleEventClick(nextEvent)}>
+                    <img src={nextEvent.image} alt={nextEvent.title} />
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
       </div>
     </ReactLenis>
   );

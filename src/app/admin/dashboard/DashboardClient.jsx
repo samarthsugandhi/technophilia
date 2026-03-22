@@ -37,6 +37,7 @@ const DashboardClient = () => {
   const [filterExpShortlisted, setFilterExpShortlisted] = useState("All");
   const [filterExpWinner, setFilterExpWinner] = useState("All");
   const [filterExpAttendance, setFilterExpAttendance] = useState("All");
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   if (status === "loading") return <div className="admin-dashboard"><h2>Loading SECURE SYSTEM...</h2></div>;
   if (!session) {
@@ -146,7 +147,7 @@ const DashboardClient = () => {
           </thead>
           <tbody>
             {filteredTeams.map((team) => (
-              <tr key={team._id}>
+              <tr key={team._id} className="clickable-row" onClick={() => setSelectedTeam(team)}>
                 <td style={{fontWeight: 'bold', letterSpacing: '1px'}}>{team.registrationId}</td>
                 <td style={{color: '#fff'}}>{team.teamName} <div style={{fontSize: '0.75rem', color: '#666'}}>Members: {team.members.map(m=>m.name).join(', ')}</div></td>
                 <td>{team.leader.name} <br/><span style={{fontSize: '0.8rem', color: '#999'}}>{team.leader.usn} | {team.leader.phone}</span></td>
@@ -156,13 +157,13 @@ const DashboardClient = () => {
                     {team.attendanceMarked ? "LOGGED IN" : "PENDING"}
                   </span>
                 </td>
-                <td>
+                <td onClick={(e) => e.stopPropagation()}>
                   <Toggle 
                     active={team.shortlisted} 
                     onChange={() => handleToggle(team._id, 'shortlisted', team.shortlisted)} 
                   />
                 </td>
-                <td>
+                <td onClick={(e) => e.stopPropagation()}>
                   <Toggle 
                     color="gold"
                     active={team.winner} 
@@ -177,6 +178,50 @@ const DashboardClient = () => {
           </tbody>
         </table>
       </div>
+
+      {selectedTeam && (
+        <div className="team-modal-overlay" onClick={() => setSelectedTeam(null)}>
+          <div className="team-modal-content" onClick={e => e.stopPropagation()}>
+            <div className="team-modal-header">
+              <h2>{selectedTeam?.teamName || "Unknown Team"}</h2>
+              <button onClick={() => setSelectedTeam(null)} className="close-btn">&times;</button>
+            </div>
+            <div className="team-modal-body">
+              <div className="detail-group">
+                <p><strong>Registration ID:</strong> {selectedTeam?.registrationId || "N/A"}</p>
+                <p><strong>Created At:</strong> {(() => {
+                  if (!selectedTeam?.createdAt) return "N/A";
+                  try { return new Date(selectedTeam.createdAt).toLocaleString(); } catch(e) { return "Invalid Date"; }
+                })()}</p>
+                <p><strong>Status:</strong> {selectedTeam?.attendanceMarked ? "LOGGED IN" : "PENDING"} | Shortlisted: {selectedTeam?.shortlisted ? "Yes" : "No"} | Winner: {selectedTeam?.winner ? "Yes" : "No"}</p>
+              </div>
+              
+              <h3>Leader Details</h3>
+              <div className="detail-group">
+                <p><strong>Name:</strong> {selectedTeam?.leader?.name || "N/A"}</p>
+                <p><strong>USN/CSN:</strong> {selectedTeam?.leader?.usn || "N/A"}</p>
+                <p><strong>Semester:</strong> {selectedTeam?.leader?.semester || "N/A"}</p>
+                <p><strong>Branch:</strong> {selectedTeam?.leader?.branch || "N/A"}</p>
+                <p><strong>Email:</strong> {selectedTeam?.leader?.email || "N/A"}</p>
+                <p><strong>Phone:</strong> {selectedTeam?.leader?.phone || "N/A"}</p>
+                <p><strong>Stay Type:</strong> {selectedTeam?.leader?.stayType || "N/A"} {selectedTeam?.leader?.hostelName ? `(${selectedTeam.leader.hostelName})` : ''}</p>
+              </div>
+
+              <h3>Teammate Details</h3>
+              {Array.isArray(selectedTeam?.members) && selectedTeam.members.map((member, i) => member ? (
+                <div className="detail-group" key={i}>
+                  <p><strong>Name:</strong> {member?.name || "N/A"}</p>
+                  <p><strong>USN/CSN:</strong> {member?.usn || "N/A"}</p>
+                  <p><strong>Semester:</strong> {member?.semester || "N/A"}</p>
+                  <p><strong>Branch:</strong> {member?.branch || "N/A"}</p>
+                  <p><strong>Email:</strong> {member?.email || "N/A"}</p>
+                  <p><strong>Stay Type:</strong> {member?.stayType || "N/A"} {member?.hostelName ? `(${member.hostelName})` : ''}</p>
+                </div>
+              ) : null)}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

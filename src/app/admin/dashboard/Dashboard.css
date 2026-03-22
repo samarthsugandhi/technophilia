@@ -126,3 +126,108 @@ th {
 .toggle-bg.active-gold .toggle-knob {
   background: #000;
 }
+
+/* Team Details Modal */
+.team-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.team-modal-content {
+  background: #111;
+  border: 1px solid #333;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.team-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 15px;
+}
+
+.team-modal-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 2.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.team-modal-body h3 {
+  color: #ccc;
+  margin: 25px 0 15px 0;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-group {
+  background: #000;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #222;
+  margin-bottom: 15px;
+}
+
+.detail-group p {
+  margin: 10px 0;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.detail-group p:last-child {
+  margin-bottom: 0;
+}
+
+.detail-group p:first-child {
+  margin-top: 0;
+}
+
+.detail-group p strong {
+  color: #888;
+  display: inline-block;
+  min-width: 140px;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.clickable-row:hover {
+  background: #111;
+}

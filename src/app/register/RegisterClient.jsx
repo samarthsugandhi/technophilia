@@ -443,7 +443,7 @@ const RegisterClient = () => {
             {page === 0 && (
               <div className="bk-cover-inner">
                 <div className="bk-cover-frame">
-                  <p className="bk-cover-tiny">ANNUAL TECH FEST</p>
+                  <p className="bk-cover-tiny"><strong style={{ fontSize: '1.2rem', display: 'block', marginBottom: '4px' }}>RISE</strong>ANNUAL TECH FEST</p>
                   <h1 className="bk-cover-h1">TECHNOPHILIA</h1>
                   <div className="bk-cover-rule" />
                   <h2 className="bk-cover-h2">3.0 Registration</h2>

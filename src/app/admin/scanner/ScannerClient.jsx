@@ -46,10 +46,15 @@ const ScannerClient = () => {
 
       function onScanSuccess(decodedText) {
         if (isScanningRef.current) return;
-        if (window.lastScannedCode === decodedText) return;
-        window.lastScannedCode = decodedText;
-        setTimeout(() => { window.lastScannedCode = null; }, 5000);
+        
+        const now = Date.now();
+        if (window.lastScannedCode === decodedText && window.lastScannedTime && (now - window.lastScannedTime < 4000)) {
+          return;
+        }
 
+        window.lastScannedCode = decodedText;
+        window.lastScannedTime = now;
+        
         isScanningRef.current = true;
         processAttendance(decodedText);
       }
