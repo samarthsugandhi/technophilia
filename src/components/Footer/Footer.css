@@ -59,9 +59,10 @@
 .footer-header h1 {
   position: relative;
   left: -0.5vw;
-  font-size: 15vw;
+  font-size: 11vw;
   width: 100%;
   text-align: left;
+  white-space: nowrap;
 }
 
 .footer-copyright-line {
@@ -151,7 +152,7 @@
   }
 
   .footer-header h1 {
-    font-size: 18vw;
+    font-size: 11.5vw;
   }
 
   /* Copyright line — stack vertically instead of cramming 3 items */
@@ -187,7 +188,7 @@
 
 @media (max-width: 480px) {
   .footer-header h1 {
-    font-size: 20vw;
+    font-size: 12vw;
   }
 
   .footer-mentor-name {

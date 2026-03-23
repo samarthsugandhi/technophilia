@@ -5,18 +5,16 @@ import { QRCodeSVG, QRCodeCanvas } from "qrcode.react";
 import Link from "next/link";
 import "./Register.css";
 
-const SEMESTERS = ["1st Sem","2nd Sem","3rd Sem","4th Sem","5th Sem","6th Sem","7th Sem","8th Sem"];
-const HOSTELS = ["Netaji Boys Hostel","Vishveshwarya Boys Hostel","Girls Hostel"];
+const SEMESTERS = ["1st Sem", "2nd Sem", "3rd Sem", "4th Sem", "5th Sem", "6th Sem", "7th Sem", "8th Sem"];
+const HOSTELS = ["Netaji Boys Hostel", "Vishveshwarya Boys Hostel", "Girls Hostel"];
 const BRANCH_OPTIONS = [
   "Computer Science and Engineering",
   "Information Science and Engineering",
   "Artificial Intelligence and Machine Learning",
-  "Artificial Intelligence and Data Science",
   "Electronics and Communication Engineering",
   "Electrical and Electronics Engineering",
   "Mechanical Engineering",
   "Civil Engineering",
-  "Chemical Engineering",
   "Biotechnology",
   "Aerospace Engineering",
   "Industrial and Production Engineering",
@@ -25,7 +23,7 @@ const BRANCH_OPTIONS = [
 const TOTAL_PAGES = 6; // 0=cover, 1=team, 2=leader1, 3=leader2, 4=mem2, 5=review
 
 /* ── Field component ── */
-const F = ({ label, name, value, onChange, type="text", required, children }) => (
+const F = ({ label, name, value, onChange, type = "text", required, children }) => (
   <div className="bk-field">
     <label>{label}{required && <span className="bk-req">*</span>}</label>
     {children || <input type={type} name={name} value={value} onChange={onChange} autoComplete="off" />}
@@ -388,6 +386,7 @@ const RegisterClient = () => {
       alert(
         "You have registered successfully. Keep your Event Pass (QR code) / Registration ID with you while coming to the event. We will send a confirmation email to the team leader email provided, so keep it available to receive important messages."
       );
+      window.open("https://chat.whatsapp.com/Bv389viETCV6BtzXC0k7Ep?mode=gi_t", "_blank");
     }, 250);
   }, [buildAndDownloadEventPass, regId, success]);
 
@@ -409,6 +408,22 @@ const RegisterClient = () => {
             ref={qrCanvasRef}
           />
           <p className="bk-note">Event pass downloaded. Keep this QR / Registration ID for event entry.</p>
+          <a
+            href="https://chat.whatsapp.com/Bv389viETCV6BtzXC0k7Ep?mode=gi_t"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bk-homebtn bk-whatsapp"
+            style={{
+              background: "linear-gradient(135deg, #007bff, #0056b3)",
+              color: "#fff",
+              border: "none",
+              marginBottom: "10px",
+              textDecoration: "none",
+              textShadow: "0 1px 2px rgba(0,0,0,0.2)"
+            }}
+          >
+            JOIN WHATSAPP GROUP FOR UPDATES
+          </a>
           <button type="button" className="bk-homebtn bk-download" onClick={buildAndDownloadEventPass}>
             Download Event Pass Again
           </button>
@@ -458,12 +473,12 @@ const RegisterClient = () => {
                 <h3 className="bk-head">Team Details</h3>
                 <div className="bk-fields">
                   <F label="Team Name" name="teamName" value={formData.teamName} required
-                    onChange={e => setFormData(p => ({...p, teamName: e.target.value}))} />
+                    onChange={e => setFormData(p => ({ ...p, teamName: e.target.value }))} />
                   <div className="bk-field" style={{ height: "calc(var(--bk-line-gap) * 3)", justifyContent: "flex-start", paddingTop: "8px" }}>
                     <label>Competition Format</label>
-                    <p style={{ margin: 0, color: "#4a2c16", lineHeight: "26px", fontSize: "0.95rem", fontWeight: "500" }}>
-                      Single registration for TECHNOPHILIA 3.0. All teams compete across 7 technical themes.
-                      Shortlisted teams play 5 rounds, then finalists compete in the last 2 rounds for winner announcement.
+                    <p style={{ margin: 0, color: "#4a2c16", lineHeight: "1.4", fontSize: "0.95rem", fontWeight: "500" }}>
+                      <b>Team of 2 members.</b> Single registration for TECHNOPHILIA 3.0. Thier are total 6 technical themes. All teams compete across 4 technical themes.
+                      Shortlisted teams will compete in the ultimate 2-round showdown to crown the winner.
                     </p>
                   </div>
                 </div>
@@ -508,7 +523,7 @@ const RegisterClient = () => {
                   <div className="bk-field">
                     <label>Stay Type</label>
                     <div className="bk-radio-group">
-                      {["Local","Hostel"].map(t => (
+                      {["Local", "Hostel"].map(t => (
                         <label key={t} className="bk-radio-label">
                           <input type="radio" name="stayType" value={t} checked={formData.leader.stayType === t} onChange={uL} />
                           {t}
@@ -557,7 +572,7 @@ const RegisterClient = () => {
                   <div className="bk-field">
                     <label>Stay Type</label>
                     <div className="bk-radio-group">
-                      {["Local","Hostel"].map(t => (
+                      {["Local", "Hostel"].map(t => (
                         <label key={t} className="bk-radio-label">
                           <input type="radio" name="stayType" value={t} checked={formData.teammate.stayType === t} onChange={u2} />
                           {t}
