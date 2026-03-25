@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Reviews.css";
+import Link from "next/link";
 
 import gsap from "gsap";
 
@@ -123,6 +124,13 @@ const Reviews = () => {
             </button>
             <h2 className="banner-desc-title">{descBanner.title}</h2>
             <p className="banner-desc-body">{descBanner.description}</p>
+            <Link
+              href="/about"
+              className="banner-desc-explore"
+              onClick={closeDescription}
+            >
+              Explore More →
+            </Link>
           </div>
         </div>
       )}

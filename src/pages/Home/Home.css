@@ -505,7 +505,42 @@
   box-shadow: 0 14px 40px rgba(0,0,0,0.7);
 }
 
+.scroll-down-arrow {
+  position: absolute;
+  bottom: 5em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px dashed var(--fg);
+  color: var(--fg);
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease;
+  animation: arrowBob 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+.scroll-down-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.scroll-down-arrow:hover {
+  border-style: solid;
+}
+
+@keyframes arrowBob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(8px); }
+}
+
 @media (max-width: 1000px) {
+
   .hero {
     padding: 1.25em;
     justify-content: center;

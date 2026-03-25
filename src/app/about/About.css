@@ -1,0 +1,365 @@
+/* ── About Page Redesign ── */
+.about-page-wrapper {
+  width: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  padding-top: 4em;
+}
+
+/* ── Splash Hero ── */
+.about-hero-new {
+  position: relative;
+  width: 100vw;
+  height: 80vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050505;
+  color: #fff;
+  overflow: hidden;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c9953c;
+  margin-bottom: 2em;
+}
+
+.about-hero-new h1 {
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.9;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.3em;
+  display: flex;
+  gap: 0.3em;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-hero-new h1 span {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.about-hero-sub {
+  max-width: 600px;
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5em;
+  will-change: transform, opacity;
+}
+
+.about-hero-sub p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #a0a0a0;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 32px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ── Dynamic Event Sections ── */
+.about-events-wrapper {
+  width: 100%;
+}
+
+.about-event-new {
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.about-event-new:nth-child(even) {
+  background-color: #f7f7f7;
+}
+
+.about-event-inner {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 80px;
+  padding: 100px 0;
+}
+
+/* ── Sticky Sidebar ── */
+.about-header-sidebar {
+  position: relative;
+}
+
+.sticky-header-content {
+  position: sticky;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ev-edition {
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #c9953c;
+  font-weight: 700;
+  margin-bottom: 1em;
+}
+
+.ev-title {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin-bottom: 0.3em;
+  word-wrap: break-word;
+}
+
+.ev-date {
+  font-size: 1.1rem;
+  opacity: 0.6;
+  font-weight: 500;
+  margin-bottom: 2em;
+}
+
+.ev-divider {
+  width: 60px;
+  height: 4px;
+  background: var(--fg);
+  margin-bottom: 2em;
+}
+
+.ev-tagline {
+  font-size: 1.4rem;
+  font-style: italic;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* ── Main Content Area ── */
+.about-content-main {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.ev-description-box p {
+  font-size: 1.35rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+.ev-rounds-wrapper {
+  margin-top: 2.5em;
+  padding-top: 2.5em;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.ev-rounds-title {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 1.5em;
+  color: #c9953c; /* matches .hero-eyebrow and .ev-edition */
+}
+
+.ev-rounds-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ev-round-pill {
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 50px;
+  color: #333;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.ev-round-pill:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+  transform: translateY(-2px);
+}
+
+.section-label {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 1.5em;
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ── Masonry Gallery ── */
+.ev-masonry-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 16px;
+}
+
+.about-gallery-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #eee;
+}
+
+.about-gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.about-gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+.about-gallery-card:hover img {
+  transform: scale(1.05);
+}
+
+.about-gallery-card:hover .about-gallery-overlay {
+  background: rgba(0, 0, 0, 0);
+}
+
+.about-gallery-card.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  background: transparent;
+}
+
+.about-gallery-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.3;
+}
+
+.about-gallery-placeholder svg {
+  width: 32px;
+  height: 32px;
+}
+
+.about-gallery-placeholder span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Grid Spanning Classes */
+.span-1 { grid-column: span 1; grid-row: span 1; }
+.span-2-col { grid-column: span 2; grid-row: span 1; }
+.span-2-row { grid-column: span 1; grid-row: span 2; }
+.span-2-col.span-2-row { grid-column: span 2; grid-row: span 2; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .about-event-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 60px 0;
+  }
+
+  .sticky-header-content {
+    position: relative;
+    top: 0;
+  }
+
+  .ev-masonry-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 150px;
+  }
+
+  .span-2-row { grid-row: span 1; } /* Disable row spanning on smaller screens to avoid awkward empty spaces */
+}
+
+@media (max-width: 600px) {
+  .about-hero-new {
+    min-height: 500px;
+  }
+
+  .about-hero-new h1 {
+    font-size: 3.5rem;
+  }
+
+  .about-hero-sub p {
+    font-size: 1rem;
+  }
+
+  .ev-title {
+    font-size: 2.8rem;
+  }
+
+  .ev-description-box p {
+    font-size: 1.15rem;
+  }
+
+  .ev-masonry-gallery {
+    grid-template-columns: minmax(0, 1fr); /* Actually, 2 columns on mobile is better for photos */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    grid-auto-rows: 120px;
+  }
+
+  .span-2-col { grid-column: span 2; } /* Keep 2-col spans full width */
+}

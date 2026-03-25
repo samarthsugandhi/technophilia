@@ -126,80 +126,42 @@ const Home = () => {
 
     window.addEventListener("resize", handleResize);
 
-    const stickySection = stickyTitlesRef.current;
     const titles = titlesRef.current.filter(Boolean);
 
-    if (!stickySection || titles.length !== 3) {
+    if (titles.length !== 3) {
       window.removeEventListener("resize", handleResize);
       return;
     }
 
+    // Start: show title[0], hide others
     gsap.set(titles[0], { opacity: 1, scale: 1 });
     gsap.set(titles[1], { opacity: 0, scale: 0.75 });
     gsap.set(titles[2], { opacity: 0, scale: 0.75 });
 
-    const pinTrigger = ScrollTrigger.create({
-      trigger: stickySection,
-      start: "top top",
-      end: `+=${window.innerHeight * 5}`,
-      pin: true,
-      pinSpacing: true,
-    });
+    let current = 0;
 
-    const masterTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: stickySection,
-        start: "top top",
-        end: `+=${window.innerHeight * 4}`,
-        scrub: 0.5,
-      },
-    });
+    const showNext = () => {
+      const next = (current + 1) % titles.length;
+      // Fade out current
+      gsap.to(titles[current], {
+        opacity: 0,
+        scale: 0.75,
+        duration: 0.5,
+        ease: "power2.out",
+      });
+      // Fade in next
+      gsap.to(titles[next], {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        ease: "power2.in",
+        delay: 0.25,
+      });
+      current = next;
+    };
 
-    masterTimeline
-      .to(
-        titles[0],
-        {
-          opacity: 0,
-          scale: 0.75,
-          duration: 0.3,
-          ease: "power2.out",
-        },
-        1
-      )
-
-      .to(
-        titles[1],
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.in",
-        },
-        1.25
-      );
-
-    masterTimeline
-      .to(
-        titles[1],
-        {
-          opacity: 0,
-          scale: 0.75,
-          duration: 0.3,
-          ease: "power2.out",
-        },
-        2.5
-      )
-
-      .to(
-        titles[2],
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.in",
-        },
-        2.75
-      );
+    // Change title every 2.5 seconds
+    const intervalId = setInterval(showNext, 2500);
 
     const workHeaderSection = stickyWorkHeaderRef.current;
     const homeWorkSection = homeWorkRef.current;
@@ -216,16 +178,11 @@ const Home = () => {
       });
     }
 
-
     return () => {
-      pinTrigger.kill();
+      clearInterval(intervalId);
       if (workHeaderPinTrigger) {
         workHeaderPinTrigger.kill();
       }
-      if (masterTimeline.scrollTrigger) {
-        masterTimeline.scrollTrigger.kill();
-      }
-      masterTimeline.kill();
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -270,6 +227,18 @@ const Home = () => {
           <h2 ref={(el) => (titlesRef.current[2] = el)}>
             Register your team. Enter the arena. Own TECHNOPHILIA 3.0.
           </h2>
+
+          <button
+            className="scroll-down-arrow"
+            aria-label="Scroll down"
+            onClick={() => {
+              stickyWorkHeaderRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </section>
 
         <section ref={stickyWorkHeaderRef} className="sticky-work-header">
