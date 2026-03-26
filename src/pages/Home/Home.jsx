@@ -222,7 +222,7 @@ const Home = () => {
             Where coders, builders, and problem-solvers collide.
           </h2>
           <h2 ref={(el) => (titlesRef.current[1] = el)}>
-            6 events. 2 days. One massive prize pool awaits.
+            7 events. 2 days. One massive prize pool awaits.
           </h2>
           <h2 ref={(el) => (titlesRef.current[2] = el)}>
             Register your team. Enter the arena. Own TECHNOPHILIA 3.0.

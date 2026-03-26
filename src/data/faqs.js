@@ -2,7 +2,7 @@ export const faqItems = [
   {
     question: "What is TECHNOPHILIA 3.0?",
     answer:
-      "TECHNOPHILIA 3.0 is the third edition of the annual technical fest hosted by the RISE Association, Department of Information Science and Engineering, Basaveshwar Engineering College (Autonomous), Bagalkot. It features 6 competitive technical events spanning coding, problem-solving, debugging, and innovation.",
+      "TECHNOPHILIA 3.0 is the third edition of the annual technical fest hosted by the RISE Association, Department of Information Science and Engineering, Basaveshwar Engineering College (Autonomous), Bagalkot. It features 7 competitive technical events spanning coding, problem-solving, debugging, and innovation.",
   },
   {
     question: "When and where is TECHNOPHILIA 3.0?",
@@ -10,9 +10,9 @@ export const faqItems = [
       "The event is held on 1st & 2nd April 2026 at the ISE Department, Basaveshwar Engineering College, Bagalkot. Day 1 starts at 5:30 PM on 1st April.",
   },
   {
-    question: "What are the 6 events in TECHNOPHILIA 3.0?",
+    question: "What are the 7 events in TECHNOPHILIA 3.0?",
     answer:
-      "The 6 technical events are: (1) SPINIGMA, (2) MIND YOUR MANOR, (3) BID-O-RITHM, (4) SECRET SYNDICATE, (5) CODELEAGUE, and (6) IDEA TO IMPACT. Each event tests a different technical skill.",
+      "The 7 technical events are: (1) SPINIGMA, (2) MIND YOUR MANOR, (3) CODECHAOS, (4) SECRET SYNDICATE, (5) BOTMANIA, (6) CODELEAGUE, and (7) IDEA TO IMPACT. Each event tests a different technical skill.",
   },
   {
     question: "What is the team size?",
@@ -32,7 +32,7 @@ export const faqItems = [
   {
     question: "How does the competition work?",
     answer:
-      "There are 6 events in total. The first 4 events are open to all registered teams. Based on the cumulative scores from these initial 4 rounds, top-performing teams will be shortlisted for the final phase. The shortlisted teams will then compete in the last 2 events on the second day to determine the ultimate winners.",
+      "There are 7 events in total. The first 5 events are open to all registered teams. Based on the cumulative scores from these initial 5 rounds, top-performing teams will be shortlisted for the final phase. The shortlisted teams will then compete in the last 2 events on the second day to determine the ultimate winners.",
   },
   {
     question: "How do I register my team?",
@@ -52,7 +52,7 @@ export const faqItems = [
   {
     question: "What are the rules and shortlisting criteria for the events?",
     answer:
-      "There are 6 events in total. The first 4 events are mandatory and will be participated in by all registered teams. Based on the cumulative score of these 4 rounds, top teams will be shortlisted for the final phase. The shortlisted teams will then compete in the last 2 events on the next day, after which the ultimate winner will be decided.",
+      "There are 7 events in total. The first 5 events are mandatory and will be participated in by all registered teams. Based on the cumulative score of these 5 rounds, top teams will be shortlisted for the final phase. The shortlisted teams will then compete in the last 2 events on the next day, after which the ultimate winner will be decided.",
   },
   {
     question: "Can I track my registration after signing up?",

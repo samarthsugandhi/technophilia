@@ -15,10 +15,10 @@ const workList = [
   },
   {
     id: 3,
-    title: "BID-O-RITHM",
+    title: "CODECHAOS",
     category: "Event",
     image: "/work/work-2.jpeg",
-    description: `Bid Smart. Choose Wisely. Solve Efficiently.\n\nGame Concept\nPhase 1: Bidding Round\n• Each team is given a fixed number of points (credits)\n• A list of algorithms will be available for bidding\nExamples:\no Sorting (Merge Sort, Quick Sort)\no Searching (Binary Search)\n• Teams must strategically bid and purchase algorithms\n• Each algorithm has a cost / auction value\nPhase 2: Problem Solving\n• Teams are given a set of questions/problems\n• To solve a question:\no Teams can use the algorithms they purchased\n• If the team owns the correct algorithm → they can solve easily\n• If not → they must apply their technical skills`
+    description: `Unjumble. Understand. Execute.\n\nGame Concept\n• Given shuffled code lines.\n• Participants must:\no Arrange code in correct order.\no Understand logic.\no Write the correct output.`
   },
   {
     id: 4,
@@ -29,13 +29,20 @@ const workList = [
   },
   {
     id: 5,
+    title: "BOTMANIA",
+    category: "Event",
+    image: "/work/work-7.jpeg",
+    description: `Automate. Respond. Dominate.\n\nGame Concept\n• Teams are given specific bot-related tasks.\n• They must create and configure commands within a limited time.\n• Tasks include:\no Creating custom commands.\no Setting automated responses.\no Debugging bot errors.\n• Goal: Complete the given task correctly within the time limit.`
+  },
+  {
+    id: 6,
     title: "CODELEAGUE",
     category: "Event",
     image: "/work/work-5.jpeg",
     description: `Code. Debug. Dominate.\n\nRound Structure\nThis round consists of a total of 4 questions:\n• 2 Problem-Solving Questions\n  o Test logical thinking and coding ability\n  o Require writing optimized solutions\n• 2 Debugging Questions\n  o Given pre-written code with errors\n  o Participants must identify and fix issues`
   },
   {
-    id: 6,
+    id: 7,
     title: "IDEA TO IMPACT",
     category: "Event",
     image: "/work/work-6.jpeg",

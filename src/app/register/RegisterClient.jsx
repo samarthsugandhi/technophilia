@@ -477,7 +477,7 @@ const RegisterClient = () => {
                   <div className="bk-field" style={{ height: "calc(var(--bk-line-gap) * 3)", justifyContent: "flex-start", paddingTop: "8px" }}>
                     <label>Competition Format</label>
                     <p style={{ margin: 0, color: "#4a2c16", lineHeight: "1.4", fontSize: "0.95rem", fontWeight: "500" }}>
-                      <b>Team of 2 members.</b> Single registration for TECHNOPHILIA 3.0. Thier are total 6 technical themes. All teams compete across 4 technical themes.
+                      <b>Team of 2 members.</b> Single registration for TECHNOPHILIA 3.0. There are a total of 7 technical themes. All teams compete across 5 technical themes.
                       Shortlisted teams will compete in the ultimate 2-round showdown to crown the winner.
                     </p>
                   </div>
