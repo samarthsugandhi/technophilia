@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const [token, setToken] = useState("");
   const [activeTab, setActiveTab] = useState("teams");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isRegOpen, setIsRegOpen] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("adminToken");
@@ -45,6 +46,16 @@ export default function AdminDashboard() {
       return;
     }
     setToken(storedToken);
+
+    // Fetch the registration setting
+    fetch("/api/admin/settings", { headers: { Authorization: `Bearer ${storedToken}` } })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.isRegistrationOpen === "boolean") {
+          setIsRegOpen(data.isRegistrationOpen);
+        }
+      })
+      .catch((err) => console.error("Failed to load settings:", err));
   }, [router]);
 
   const {
@@ -73,6 +84,33 @@ export default function AdminDashboard() {
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     router.push("/admin/login");
+  };
+
+  const toggleRegistration = async () => {
+    const confirmMessage = isRegOpen
+      ? "Are you sure you want to STOP the registration? (Users clicking \"Register\" will see a closed message)"
+      : "Are you sure you want to OPEN the registration back up?";
+      
+    if (!window.confirm(confirmMessage)) return;
+    
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ isRegistrationOpen: !isRegOpen }),
+      });
+      if (res.ok) {
+        setIsRegOpen(!isRegOpen);
+        alert(`Registration has successfully been ${isRegOpen ? "STOPPED" : "OPENED"}.`);
+      } else {
+        alert("Failed to change registration status.");
+      }
+    } catch (e) {
+      alert("Error reaching the server. Please check your connection.");
+    }
   };
 
   if (!token) return <div className="admin-loading">Authorizing...</div>;
@@ -106,7 +144,25 @@ export default function AdminDashboard() {
       <header className="admin-header">
         <div className="admin-header-left">
           <h1>TECHNOPHILIA 3.0 - CONTROL PANEL</h1>
-          <p>April 1-2, 2026</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '4px' }}>
+            <p style={{ margin: 0 }}>April 1-2, 2026</p>
+            <button
+              onClick={toggleRegistration}
+              style={{
+                backgroundColor: isRegOpen ? "#dc3545" : "#28a745",
+                color: "white",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                fontSize: "0.85rem",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              {isRegOpen ? "Registration: SET STOPPED" : "Registration: SET OPEN"}
+            </button>
+          </div>
         </div>
         <button onClick={handleLogout} className="admin-logout-btn">
           LOGOUT
@@ -206,49 +262,81 @@ function TeamsSection({ teams, searchQuery, setSearchQuery, token, onUpdate }) {
           <div>Action</div>
         </div>
         {teams.map((team) => (
-          <div key={team._id} className="teams-row">
-            <div className="team-cell">
-              <span className="cell-label">Team ID</span>
-              <span className="cell-value team-id">{team.registrationId || "-"}</span>
-            </div>
-            <div className="team-cell">
-              <span className="cell-label">Team Name</span>
-              <span className="cell-value">{team.teamName || "-"}</span>
-            </div>
-            <div className="team-cell">
-              <span className="cell-label">Leader</span>
-              <span className="cell-value">{team.leader?.name || "-"}</span>
-            </div>
-            <div className="team-cell">
-              <span className="cell-label">Members</span>
-              <span className="cell-value">
-                {team.members?.map((m) => m.name).join(", ") || "-"}
-              </span>
-            </div>
-            <div className="team-cell">
-              <span className="cell-label">Status</span>
-              <span className="team-status">
-                {team.attendanceMarked && <span className="badge present">✓ Present</span>}
-                {team.shortlisted && <span className="badge shortlist">⭐ Shortlisted</span>}
-                {team.winner && <span className="badge winner">🏆 Winner</span>}
-                {team.firstRunnerUp && <span className="badge winner">🥈 1st Runner-up</span>}
-                {team.secondRunnerUp && <span className="badge winner">🥉 2nd Runner-up</span>}
-                {!team.attendanceMarked && !team.shortlisted && !team.winner && !team.firstRunnerUp && !team.secondRunnerUp && (
-                  <span className="badge pending">⏳ Pending</span>
-                )}
-              </span>
-            </div>
-            <div className="team-cell">
-              <span className="cell-label">Action</span>
-              <DeleteTeamBtn team={team} token={token} onDelete={onUpdate} />
-            </div>
-          </div>
+          <TeamRow key={team._id} team={team} token={token} onUpdate={onUpdate} />
         ))}
         {teams.length === 0 && (
           <div className="teams-empty">No teams found for your current filter.</div>
         )}
       </div>
     </div>
+  );
+}
+
+function TeamRow({ team, token, onUpdate }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <>
+      <div className={`teams-row ${expanded ? "expanded-active" : ""}`} onClick={() => setExpanded(!expanded)}>
+        <div className="team-cell">
+          <span className="cell-label">Team ID</span>
+          <span className="cell-value team-id">{team.registrationId || "-"}</span>
+        </div>
+        <div className="team-cell">
+          <span className="cell-label">Team Name</span>
+          <span className="cell-value" style={{fontWeight: '700'}}>{team.teamName || "-"}</span>
+        </div>
+        <div className="team-cell">
+          <span className="cell-label">Leader</span>
+          <span className="cell-value">{team.leader?.name || "-"}</span>
+        </div>
+        <div className="team-cell">
+          <span className="cell-label">Members</span>
+          <span className="cell-value">
+            {team.members?.map((m) => m.name).join(", ") || "-"}
+          </span>
+        </div>
+        <div className="team-cell">
+          <span className="cell-label">Status</span>
+          <span className="team-status">
+            {team.attendanceMarked && <span className="badge present">✓ Present</span>}
+            {team.shortlisted && <span className="badge shortlist">⭐ Shortlisted</span>}
+            {team.winner && <span className="badge winner">🏆 Winner</span>}
+            {team.firstRunnerUp && <span className="badge winner">🥈 1st Runner</span>}
+            {team.secondRunnerUp && <span className="badge winner">🥉 2nd Runner</span>}
+            {!team.attendanceMarked && !team.shortlisted && !team.winner && !team.firstRunnerUp && !team.secondRunnerUp && (
+              <span className="badge pending">⏳ Pending</span>
+            )}
+          </span>
+        </div>
+        <div className="team-cell" onClick={(e) => e.stopPropagation()}>
+          <span className="cell-label">Action</span>
+          <DeleteTeamBtn team={team} token={token} onDelete={onUpdate} />
+        </div>
+      </div>
+      
+      {expanded && (
+        <div className="teams-row-expanded">
+          <div className="expanded-section">
+            <h4>Leader Details</h4>
+            <p><strong>USN/CSN:</strong> {team.leader?.usn || team.leader?.csn || "-"}</p>
+            <p><strong>Email:</strong> {team.leader?.email || "-"}</p>
+            <p><strong>Phone:</strong> {team.leader?.phone || "-"}</p>
+            <p><strong>Branch:</strong> {team.leader?.branch || "-"}</p>
+            <p><strong>Stay:</strong> {team.leader?.stayType === "Hostel" ? `Hostel (${team.leader?.hostelName || "N/A"})` : "Local"}</p>
+          </div>
+          {team.members?.map((m, idx) => (
+            <div className="expanded-section" key={idx}>
+              <h4>Teammate Details</h4>
+              <p><strong>USN/CSN:</strong> {m.usn || m.csn || "-"}</p>
+              <p><strong>Email:</strong> {m.email || "-"}</p>
+              <p><strong>Branch:</strong> {m.branch || "-"}</p>
+              <p><strong>Stay:</strong> {m.stayType === "Hostel" ? `Hostel (${m.hostelName || "N/A"})` : "Local"}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -627,7 +715,7 @@ function ExportSection({ teams }) {
   };
 
   const getExportData = (filter) => {
-    let data = teams || [];
+    let data = Array.isArray(teams) ? [...teams].reverse() : [];
 
     if (filter === "attendance") {
       data = data.filter((t) => t.attendanceMarked);
@@ -704,8 +792,38 @@ function ExportSection({ teams }) {
   const exportPDF = async (filter) => {
     if (typeof window === "undefined") return;
 
-    const data = getExportData(filter);
-    const rows = buildRows(data);
+    let data = getExportData(filter);
+    let printRoutes = [];
+    let printHeaders = [];
+
+    if (filter === "attendance") {
+      printHeaders = [
+        "Team Name",
+        "Team Registration ID",
+        "Leader Name (USN/CSN)",
+        "Teammate (USN/CSN)",
+        "Attendance 1st April",
+        "Attendance 2nd April",
+      ];
+      printRoutes = (data || []).map((t) => [
+        t.teamName || "-",
+        t.registrationId || "-",
+        `${t.leader?.name || "-"} (${t.leader?.usn || t.leader?.csn || "-"})`,
+        `${t.members?.[0]?.name || "-"} (${t.members?.[0]?.usn || t.members?.[0]?.csn || "-"})`,
+        t.attendanceMarked ? "✓ Present" : "", // Auto-fill if already grabbed
+        t.shortlisted ? "" : "N/A - Not Shortlisted", // 2nd April
+      ]);
+    } else if (filter === "all_basic") {
+      printHeaders = ["Team Name", "Registration ID", "Leader Email"];
+      printRoutes = (data || []).map((t) => [
+        t.teamName || "-",
+        t.registrationId || "-",
+        t.leader?.email || "-",
+      ]);
+    } else {
+      printHeaders = headers;
+      printRoutes = buildRows(data);
+    }
 
     const [{ jsPDF }, { default: autoTable }] = await Promise.all([
       import("jspdf/dist/jspdf.umd.min.js"),
@@ -722,11 +840,11 @@ function ExportSection({ teams }) {
 
     autoTable(doc, {
       startY: 55,
-      head: [headers],
-      body: rows,
+      head: [printHeaders],
+      body: printRoutes,
       styles: {
-        fontSize: 7,
-        cellPadding: 4,
+        fontSize: filter === "attendance" ? 9 : 7,
+        cellPadding: filter === "attendance" ? 8 : 4,
       },
       headStyles: {
         fillColor: [30, 30, 30],
@@ -734,6 +852,10 @@ function ExportSection({ teams }) {
       alternateRowStyles: {
         fillColor: [245, 245, 245],
       },
+      columnStyles: filter === "attendance" ? {
+        4: { cellWidth: 80 }, 
+        5: { cellWidth: 100 } 
+      } : {},
       margin: { left: 18, right: 18 },
     });
 
@@ -745,10 +867,16 @@ function ExportSection({ teams }) {
       <h2>Export Data</h2>
       <div className="export-buttons">
         <div className="export-group">
-          <h4>All Teams</h4>
+          <h4>All Teams (Comprehensive)</h4>
           <div>
             <button onClick={() => exportCSV("all")} className="btn-export">CSV</button>
             <button onClick={() => void exportPDF("all")} className="btn-export">PDF</button>
+          </div>
+        </div>
+        <div className="export-group">
+          <h4>All Teams (Basic Info)</h4>
+          <div>
+            <button onClick={() => void exportPDF("all_basic")} className="btn-export">PDF (Basic)</button>
           </div>
         </div>
         <div className="export-group">
