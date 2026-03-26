@@ -12,7 +12,7 @@ export const faqItems = [
   {
     question: "What are the 7 events in TECHNOPHILIA 3.0?",
     answer:
-      "The 7 technical events are: (1) SPINIGMA, (2) MIND YOUR MANOR, (3) CODECHAOS, (4) SECRET SYNDICATE, (5) BOTMANIA, (6) CODELEAGUE, and (7) IDEA TO IMPACT. Each event tests a different technical skill.",
+      "The 7 technical events are: (1) SPINIGMA, (2) MIND YOUR MANOR, (3) CODECHAOS, (4) SECRET SYNDICATE, (5) CAROLLEMAZE, (6) CODELEAGUE, and (7) IDEA TO IMPACT. Each event tests a different technical skill.",
   },
   {
     question: "What is the team size?",

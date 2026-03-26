@@ -29,10 +29,10 @@ const workList = [
   },
   {
     id: 5,
-    title: "BOTMANIA",
+    title: "CAROLLEMAZE",
     category: "Event",
     image: "/work/work-7.jpeg",
-    description: `Automate. Respond. Dominate.\n\nGame Concept\n• Teams are given specific bot-related tasks.\n• They must create and configure commands within a limited time.\n• Tasks include:\no Creating custom commands.\no Setting automated responses.\no Debugging bot errors.\n• Goal: Complete the given task correctly within the time limit.`
+    description: `Navigate. Code. Conquer.\n\nGame Concept\n• Teams are given specific bot-related tasks.\n• They must create and configure commands within a limited time.\n• Tasks include:\no Creating custom commands.\no Setting automated responses.\no Debugging bot errors.\n• Goal: Complete the given task correctly within the time limit.`
   },
   {
     id: 6,
