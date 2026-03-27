@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 const events = [
   {
     id: "tech1",
-    title: "TECHNOPHILIA 1.0",
+    title: "TECHNOPHILIA",
     edition: "Edition 1",
     date: "27th & 29th May 2022",
     tagline: "Where it all began.",
@@ -52,7 +52,7 @@ const events = [
       "inGenUIty",
     ],
     photoDir: "tech2",
-    photoCount: 8, // 8 photos for Tech 2
+    photoCount: 12, // 12 photos for Tech 2
   },
 ];
 
@@ -180,7 +180,7 @@ const AboutClient = () => {
               RISE Association Presents
             </div>
             <h1>
-              <span>Our</span> <span>Legacy</span>
+              <span>The</span> <span>Journey</span>
             </h1>
             <div className="about-hero-sub">
               <p>

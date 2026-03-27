@@ -2,12 +2,12 @@ export const faqItems = [
   {
     question: "What is TECHNOPHILIA 3.0?",
     answer:
-      "TECHNOPHILIA 3.0 is the third edition of the annual technical fest hosted by the RISE Association, Department of Information Science and Engineering, Basaveshwar Engineering College (Autonomous), Bagalkot. It features 7 competitive technical events spanning coding, problem-solving, debugging, and innovation.",
+      "TECHNOPHILIA 3.0 is the third edition of the technical fest hosted by the RISE Association, Department of Information Science and Engineering, Basaveshwar Engineering College (Autonomous), Bagalkot. It features 7 competitive technical events spanning coding, problem-solving, debugging, and innovation.",
   },
   {
     question: "When and where is TECHNOPHILIA 3.0?",
     answer:
-      "The event is held on 1st & 2nd April 2026 at the ISE Department, Basaveshwar Engineering College, Bagalkot. Day 1 starts at 5:30 PM on 1st April.",
+      "The event is held on 1st & 2nd April 2026 at the GALLERY HALL, BEC. Day 1 starts at 5:30 PM on 1st April.",
   },
   {
     question: "What are the 7 events in TECHNOPHILIA 3.0?",
@@ -37,13 +37,9 @@ export const faqItems = [
   {
     question: "How do I register my team?",
     answer:
-      "Click the 'Register' link in the navigation or visit /register. Fill in your team name and team-lead details (name, CSN/USN, branch, semester, stay info). You may optionally add 1 teammate. You'll receive a confirmation ID and a QR code upon successful registration.",
+      "Click the 'Register' link in the navigation or visit /register. Fill in your team name and team-lead details (name, USN, branch, semester, stay info). You may optionally add 1 teammate. You'll receive a confirmation ID and a QR code upon successful registration.",
   },
-  {
-    question: "What is CSN vs USN?",
-    answer:
-      "CSN (College Seat Number) is common in early semesters and USN (University Seat Number) is used across higher semesters. For TECHNOPHILIA 3.0 registration, 1st/2nd semester students may enter either CSN or USN if allotted; 3rd to 8th semester should enter USN.",
-  },
+
   {
     question: "Who are the student coordinators?",
     answer:
@@ -62,6 +58,6 @@ export const faqItems = [
   {
     question: "Who can participate?",
     answer:
-      "All students of Basaveshwar Engineering College, Bagalkot are eligible to participate. Ensure both members of your team are from the same college and have valid CSN/USN numbers.",
+      "All students of Basaveshwar Engineering College, Bagalkot are eligible to participate. Ensure both members of your team are from the same college and have valid USN numbers.",
   },
 ];

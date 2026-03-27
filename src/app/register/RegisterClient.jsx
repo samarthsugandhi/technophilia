@@ -16,8 +16,10 @@ const BRANCH_OPTIONS = [
   "Mechanical Engineering",
   "Civil Engineering",
   "Biotechnology",
-  "Aerospace Engineering",
+  "Electronics and Computer Science Engineering(ECS)",
+  "Automobile Engineering",
   "Industrial and Production Engineering",
+  "MCA",
   "Others",
 ];
 const TOTAL_PAGES = 4; // 0=cover, 1=team+lead, 2=teammate(optional), 3=review

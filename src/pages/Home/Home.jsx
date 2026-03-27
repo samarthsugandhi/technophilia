@@ -228,7 +228,7 @@ const Home = () => {
             ⚡ HURRY! LIMITED SLOTS — FIRST COME, FIRST SERVED ⚡
           </div>
           <div className="sticky-titles-nav" style={{ marginTop: '50px' }}>
-            <p className="primary sm">ISE Dept. — BEC, Bagalkot</p>
+            <p className="primary sm">GALLERY HALL, BEC</p>
             <p className="primary sm">1st – 2nd April 2026</p>
           </div>
           <div className="sticky-titles-footer">

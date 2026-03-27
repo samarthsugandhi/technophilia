@@ -35,7 +35,7 @@ const ContactForm = () => {
 
           <div className="contact-form-availability">
             <p className="primary sm">Event: 1st &amp; 2nd April 2026</p>
-            <p className="primary sm">Venue: ISE Dept. — BEC, Bagalkot</p>
+            <p className="primary sm">Venue: GALLERY HALL, BEC</p>
           </div>
         </div>
 
