@@ -30,6 +30,7 @@ const Home = () => {
   const stickyWorkHeaderRef = useRef(null);
   const homeWorkRef = useRef(null);
   const hintWrapperRef = useRef(null);
+  const presentBannerRef = useRef(null);
   const contactRef = useRef(null);
   const [showRegisterBtn, setShowRegisterBtn] = useState(false); // hidden by default
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -167,6 +168,7 @@ const Home = () => {
     const workHeaderSection = stickyWorkHeaderRef.current;
     const homeWorkSection = homeWorkRef.current;
     const scrollHintWrap = hintWrapperRef.current;
+    const presentBannerWrap = presentBannerRef.current;
 
     let workHeaderPinTrigger;
     let hintFadeTrigger;
@@ -180,8 +182,9 @@ const Home = () => {
         pinSpacing: false,
       });
       
-      if (scrollHintWrap) {
-        hintFadeTrigger = gsap.to(scrollHintWrap, {
+      const fadeTargets = [scrollHintWrap, presentBannerWrap].filter(Boolean);
+      if (fadeTargets.length > 0) {
+        hintFadeTrigger = gsap.to(fadeTargets, {
           opacity: 0,
           scrollTrigger: {
             trigger: homeWorkSection,
@@ -259,7 +262,10 @@ const Home = () => {
         </section>
 
         <section ref={stickyWorkHeaderRef} className="sticky-work-header">
-          <AnimatedCopy tag="h1" animateOnScroll="true">
+          <div ref={presentBannerRef} className="present-banner-wrapper">
+            <img src="/home/present-banner.png" alt="Present Banner" className="present-banner-img" />
+          </div>
+          <AnimatedCopy tag="h1" animateOnScroll="true" style={{ position: 'relative', zIndex: 2 }}>
             Event Lineup
           </AnimatedCopy>
           <div ref={hintWrapperRef} style={{ position: 'absolute', bottom: '3em', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>

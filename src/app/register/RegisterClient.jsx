@@ -244,7 +244,7 @@ const RegisterClient = () => {
       if (!isValidUsnForSemester(formData.teammate.usn, formData.teammate.semester)) {
         return isSemOneOrTwo(formData.teammate.semester)
           ? "For 1st/2nd semester, teammate can enter either valid CSN (10 digits) or USN"
-          : "Teammate USN format must be like 2BA23IS080";
+          : "Teammate USN format must be like 2BA23IS000";
       }
       if (!formData.teammate.email.trim()) return "Teammate email is required";
       if (!isValidEmail(formData.teammate.email)) return "Teammate email format is invalid";
