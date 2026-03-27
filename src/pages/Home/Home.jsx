@@ -210,7 +210,10 @@ const Home = () => {
         </section>
 
         <section ref={stickyTitlesRef} className="sticky-titles">
-          <div className="sticky-titles-nav">
+          <div className="blinking-banner">
+            ⚡ HURRY! LIMITED SLOTS — FIRST COME, FIRST SERVED ⚡
+          </div>
+          <div className="sticky-titles-nav" style={{ marginTop: '50px' }}>
             <p className="primary sm">ISE Dept. — BEC, Bagalkot</p>
             <p className="primary sm">1st – 2nd April 2026</p>
           </div>
@@ -245,6 +248,12 @@ const Home = () => {
           <AnimatedCopy tag="h1" animateOnScroll="true">
             Event Lineup
           </AnimatedCopy>
+          <div className="event-scroll-hint">
+            <span>Scroll Down</span>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
         </section>
 
         <section ref={homeWorkRef} className="home-work" id="events">
