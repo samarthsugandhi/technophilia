@@ -261,6 +261,10 @@
 .bk-field select:focus {
   color: #000;
 }
+.bk-field input::placeholder {
+  color: rgba(90, 50, 20, 0.45);
+  letter-spacing: 2px;
+}
 .bk-field select {
   cursor: pointer;
   -webkit-appearance: none;

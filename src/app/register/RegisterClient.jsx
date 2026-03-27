@@ -20,13 +20,14 @@ const BRANCH_OPTIONS = [
   "Industrial and Production Engineering",
   "Others",
 ];
-const TOTAL_PAGES = 6; // 0=cover, 1=team, 2=leader1, 3=leader2, 4=mem2, 5=review
+const TOTAL_PAGES = 4; // 0=cover, 1=team+lead, 2=teammate(optional), 3=review
+const DASH_PLACEHOLDER = "--------------------";
 
 /* ── Field component ── */
-const F = ({ label, name, value, onChange, type = "text", required, children }) => (
+const F = ({ label, name, value, onChange, type = "text", required, children, placeholder = DASH_PLACEHOLDER }) => (
   <div className="bk-field">
     <label>{label}{required && <span className="bk-req">*</span>}</label>
-    {children || <input type={type} name={name} value={value} onChange={onChange} autoComplete="off" />}
+    {children || <input type={type} name={name} value={value} onChange={onChange} autoComplete="off" placeholder={placeholder} />}
   </div>
 );
 
@@ -37,7 +38,7 @@ const RegisterClient = () => {
   const [formData, setFormData] = useState({
     teamName: "",
     leader: { name: "", usn: "", semester: "", email: "", phone: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
-    teammate: { name: "", semester: "", usn: "", email: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
+    teammate: { name: "", semester: "", usn: "", email: "", phone: "", branch: "", otherBranch: "", stayType: "Local", hostel: "" },
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -62,9 +63,15 @@ const RegisterClient = () => {
   const isValidUsnForSemester = (usn, semester) => {
     const value = String(usn || "").trim().toUpperCase();
     if (!value || !semester) return false;
-    if (isSemOneOrTwo(semester)) return csnPattern.test(value);
+    if (isSemOneOrTwo(semester)) return csnPattern.test(value) || usnPattern.test(value);
     return usnPattern.test(value);
   };
+
+  const hasTeammateData = useCallback(() => {
+    const t = formData.teammate;
+    return [t.name, t.semester, t.usn, t.email, t.phone, t.branch, t.otherBranch, t.hostel]
+      .some((v) => String(v || "").trim().length > 0);
+  }, [formData.teammate]);
 
   const resolveBranch = (person) => {
     const selected = String(person?.branch || "").trim();
@@ -91,13 +98,11 @@ const RegisterClient = () => {
     const usns = [];
     const emails = [];
 
-    if (currentPage >= 2) {
+    if (currentPage >= 1) {
       usns.push(formData.leader.usn);
-    }
-    if (currentPage >= 3) {
       emails.push(formData.leader.email);
     }
-    if (currentPage >= 4) {
+    if (currentPage >= 2 && hasTeammateData()) {
       usns.push(formData.teammate.usn);
       emails.push(formData.teammate.email);
     }
@@ -140,7 +145,7 @@ const RegisterClient = () => {
   };
 
   const getTeamStaySummary = () => {
-    const participants = [formData.leader, formData.teammate].filter(Boolean);
+    const participants = [formData.leader, ...(hasTeammateData() ? [formData.teammate] : [])].filter(Boolean);
     const total = participants.length;
 
     const localCount = participants.filter((p) => p.stayType !== "Hostel").length;
@@ -211,20 +216,14 @@ const RegisterClient = () => {
   const validatePage = (currentPage) => {
     if (currentPage === 1) {
       if (!formData.teamName.trim()) return "Team name is required";
-    }
-
-    if (currentPage === 2) {
       if (!formData.leader.name.trim()) return "Leader name is required";
       if (!formData.leader.semester) return "Leader semester is required";
       if (!formData.leader.usn.trim()) return "Leader USN/CSN is required";
       if (!isValidUsnForSemester(formData.leader.usn, formData.leader.semester)) {
         return isSemOneOrTwo(formData.leader.semester)
-          ? "Leader CSN must be a valid 10-digit number (example: 2025010590)"
+          ? "For 1st/2nd semester, enter either a valid CSN (10 digits) or USN (example: 2BA23IS080)"
           : "Leader USN format must be like 2BA23IS080";
       }
-    }
-
-    if (currentPage === 3) {
       if (!formData.leader.email.trim()) return "Leader email is required";
       if (!isValidEmail(formData.leader.email)) return "Leader email format is invalid";
       if (!formData.leader.phone.trim()) return "Leader phone is required";
@@ -236,17 +235,19 @@ const RegisterClient = () => {
       if (formData.leader.stayType === "Hostel" && !formData.leader.hostel) return "Please select hostel";
     }
 
-    if (currentPage === 4) {
+    if (currentPage === 2 && hasTeammateData()) {
       if (!formData.teammate.name.trim()) return "Teammate name is required";
       if (!formData.teammate.semester) return "Teammate semester is required";
       if (!formData.teammate.usn.trim()) return "Teammate USN/CSN is required";
       if (!isValidUsnForSemester(formData.teammate.usn, formData.teammate.semester)) {
         return isSemOneOrTwo(formData.teammate.semester)
-          ? "Teammate CSN must be a valid 10-digit number (example: 2025010590)"
+          ? "For 1st/2nd semester, teammate can enter either valid CSN (10 digits) or USN"
           : "Teammate USN format must be like 2BA23IS080";
       }
       if (!formData.teammate.email.trim()) return "Teammate email is required";
       if (!isValidEmail(formData.teammate.email)) return "Teammate email format is invalid";
+      if (!formData.teammate.phone.trim()) return "Teammate phone is required";
+      if (!/^\d{10}$/.test(formData.teammate.phone.trim())) return "Teammate phone must be 10 digits";
       if (!formData.teammate.branch.trim()) return "Teammate branch is required";
       if (formData.teammate.branch === "Others" && !formData.teammate.otherBranch.trim()) {
         return "Please specify Teammate branch";
@@ -303,13 +304,13 @@ const RegisterClient = () => {
   const uL = (e) => setFormData(p => ({ ...p, leader: { ...p.leader, [e.target.name]: e.target.value } }));
   const u2 = (e) => setFormData(p => ({ ...p, teammate: { ...p.teammate, [e.target.name]: e.target.value } }));
   const submit = async () => {
-    const preSubmitValidation = validatePage(4);
+    const preSubmitValidation = validatePage(2);
     if (preSubmitValidation) {
       alert(preSubmitValidation);
       return;
     }
 
-    const ids = getIdentifiersUptoPage(4);
+    const ids = getIdentifiersUptoPage(2);
     const localDupUsn = duplicateValueFromList(ids.usns);
     const localDupEmail = duplicateValueFromList(ids.emails);
     if (localDupUsn) {
@@ -347,13 +348,15 @@ const RegisterClient = () => {
         body: JSON.stringify({
           teamName: formData.teamName,
           leader: leaderPayload,
-          members: [
-            {
-              ...formData.teammate,
-              branch: resolveBranch(formData.teammate),
-              hostelName: formData.teammate.stayType === "Hostel" ? formData.teammate.hostel : "",
-            },
-          ],
+          members: hasTeammateData()
+            ? [
+              {
+                ...formData.teammate,
+                branch: resolveBranch(formData.teammate),
+                hostelName: formData.teammate.stayType === "Hostel" ? formData.teammate.hostel : "",
+              },
+            ]
+            : [],
         }),
       });
       const data = await res.json();
@@ -458,7 +461,7 @@ const RegisterClient = () => {
             {page === 0 && (
               <div className="bk-cover-inner">
                 <div className="bk-cover-frame">
-                  <p className="bk-cover-tiny"><strong style={{ fontSize: '1.2rem', display: 'block', marginBottom: '4px' }}>RISE</strong>ANNUAL TECH FEST</p>
+                  <p className="bk-cover-tiny"><strong style={{ fontSize: '1.2rem', display: 'block', marginBottom: '4px' }}>RISE</strong>TECHNICAL FEST</p>
                   <h1 className="bk-cover-h1">TECHNOPHILIA</h1>
                   <div className="bk-cover-rule" />
                   <h2 className="bk-cover-h2">3.0 Registration</h2>
@@ -474,46 +477,22 @@ const RegisterClient = () => {
                 <div className="bk-fields">
                   <F label="Team Name" name="teamName" value={formData.teamName} required
                     onChange={e => setFormData(p => ({ ...p, teamName: e.target.value }))} />
-                  <div className="bk-field" style={{ height: "calc(var(--bk-line-gap) * 3)", justifyContent: "flex-start", paddingTop: "8px" }}>
-                    <label>Competition Format</label>
-                    <p style={{ margin: 0, color: "#4a2c16", lineHeight: "1.4", fontSize: "0.95rem", fontWeight: "500" }}>
-                      <b>Team of 2 members.</b> Single registration for TECHNOPHILIA 3.0. There are a total of 7 technical themes. All teams compete across 5 technical themes.
-                      Shortlisted teams will compete in the ultimate 2-round showdown to crown the winner.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ── LEADER PART 1 ── */}
-            {page === 2 && (
-              <div className="bk-fields-wrap">
-                <h3 className="bk-head">Team Leader</h3>
-                <div className="bk-fields">
+                  <h3 className="bk-head" style={{ marginTop: "8px" }}>Team-Lead Details</h3>
                   <F label="Full Name" name="name" value={formData.leader.name} onChange={uL} required />
                   <div className="bk-field">
                     <label>Semester<span className="bk-req">*</span></label>
                     <select name="semester" value={formData.leader.semester} onChange={uL}>
-                      <option value="">— Select Semester —</option>
+                      <option value="">---- Select Semester ----</option>
                       {SEMESTERS.map(s => <option key={s}>{s}</option>)}
                     </select>
                   </div>
-                  <F label="CSN / USN" name="usn" value={formData.leader.usn} onChange={uL} required />
-                </div>
-              </div>
-            )}
-
-            {/* ── LEADER PART 2 ── */}
-            {page === 3 && (
-              <div className="bk-fields-wrap">
-                <h3 className="bk-head">Leader — Continued</h3>
-                <div className="bk-fields">
+                  <F label="USN / CSN" name="usn" value={formData.leader.usn} onChange={uL} required />
                   <F label="Email" name="email" type="email" value={formData.leader.email} onChange={uL} required />
-                  <F label="Phone" name="phone" value={formData.leader.phone} onChange={uL} required />
+                  <F label="Phone Num" name="phone" value={formData.leader.phone} onChange={uL} required />
                   <div className="bk-field">
                     <label>Branch<span className="bk-req">*</span></label>
                     <select name="branch" value={formData.leader.branch} onChange={uL}>
-                      <option value="">— Select Branch —</option>
+                      <option value="">---- Select Branch ----</option>
                       {BRANCH_OPTIONS.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
                     </select>
                   </div>
@@ -535,7 +514,7 @@ const RegisterClient = () => {
                     <div className="bk-field">
                       <label>Hostel</label>
                       <select name="hostel" value={formData.leader.hostel} onChange={uL}>
-                        <option value="">— Select Hostel —</option>
+                        <option value="">---- Select Hostel ----</option>
                         {HOSTELS.map(h => <option key={h}>{h}</option>)}
                       </select>
                     </div>
@@ -545,24 +524,28 @@ const RegisterClient = () => {
             )}
 
             {/* ── TEAMMATE ── */}
-            {page === 4 && (
+            {page === 2 && (
               <div className="bk-fields-wrap">
-                <h3 className="bk-head">Teammate</h3>
+                <h3 className="bk-head">Teammate Details</h3>
                 <div className="bk-fields">
+                  <div className="bk-field" style={{ justifyContent: "center", height: "calc(var(--bk-line-gap) * 1.2)" }}>
+                    <label style={{ marginBottom: 0 }}>Maximum 2 Members (Teammate Optional)</label>
+                  </div>
                   <F label="Full Name" name="name" value={formData.teammate.name} onChange={u2} required />
                   <div className="bk-field">
                     <label>Semester<span className="bk-req">*</span></label>
                     <select name="semester" value={formData.teammate.semester} onChange={u2}>
-                      <option value="">— Select Semester —</option>
+                      <option value="">---- Select Semester ----</option>
                       {SEMESTERS.map(s => <option key={s}>{s}</option>)}
                     </select>
                   </div>
                   <F label="CSN / USN" name="usn" value={formData.teammate.usn} onChange={u2} required />
                   <F label="Email" name="email" type="email" value={formData.teammate.email} onChange={u2} required />
+                  <F label="Phone Num" name="phone" value={formData.teammate.phone} onChange={u2} required />
                   <div className="bk-field">
                     <label>Branch<span className="bk-req">*</span></label>
                     <select name="branch" value={formData.teammate.branch} onChange={u2}>
-                      <option value="">— Select Branch —</option>
+                      <option value="">---- Select Branch ----</option>
                       {BRANCH_OPTIONS.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
                     </select>
                   </div>
@@ -584,7 +567,7 @@ const RegisterClient = () => {
                     <div className="bk-field">
                       <label>Hostel</label>
                       <select name="hostel" value={formData.teammate.hostel} onChange={u2}>
-                        <option value="">— Select Hostel —</option>
+                        <option value="">---- Select Hostel ----</option>
                         {HOSTELS.map(h => <option key={h}>{h}</option>)}
                       </select>
                     </div>
@@ -594,21 +577,22 @@ const RegisterClient = () => {
             )}
 
             {/* ── REVIEW ── */}
-            {page === 5 && (
+            {page === 3 && (
               <div className="bk-fields-wrap">
-                <h3 className="bk-head">Review & Submit</h3>
+                <h3 className="bk-head">REVIEW &amp; SUBMIT</h3>
                 <div className="bk-review">
                   {[
                     ["Team", formData.teamName],
-                    ["Competition", "TECHNOPHILIA 3.0 (All 7 Technical Themes)"],
+                    ["Team Size", hasTeammateData() ? "2" : "1"],
                     ["Leader", `${formData.leader.name}`],
                     ["USN/CSN", formData.leader.usn],
                     ["Email", formData.leader.email],
+                    ["Phone", formData.leader.phone],
                     ["Leader Branch", resolveBranch(formData.leader)],
                     ["Leader Stay", formatStay(formData.leader)],
-                    ["Teammate", `${formData.teammate.name} · ${formData.teammate.usn} · ${formData.teammate.semester}`],
-                    ["Teammate Branch", resolveBranch(formData.teammate)],
-                    ["Teammate Stay", formatStay(formData.teammate)],
+                    ["Teammate", hasTeammateData() ? `${formData.teammate.name} · ${formData.teammate.usn} · ${formData.teammate.semester}` : "Not added"],
+                    ["Teammate Branch", hasTeammateData() ? resolveBranch(formData.teammate) : "—"],
+                    ["Teammate Stay", hasTeammateData() ? formatStay(formData.teammate) : "—"],
                     ["Team Stay Summary", getTeamStaySummary()],
                   ].map(([k, v]) => (
                     <div className="bk-review-row" key={k}>
@@ -618,7 +602,7 @@ const RegisterClient = () => {
                 </div>
                 {error && <p className="bk-error">{error}</p>}
                 <button className="bk-submit" onClick={submit} disabled={loading}>
-                  {loading ? <span className="bk-spinner" /> : "✓ Register Team"}
+                  {loading ? <span className="bk-spinner" /> : "REGISTER TEAM"}
                 </button>
               </div>
             )}

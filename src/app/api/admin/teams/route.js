@@ -17,7 +17,7 @@ export async function GET(req) {
 
   try {
     await connectDB();
-    const teams = await Team.find({}).sort({ createdAt: -1 });
+    const teams = await Team.find({}).sort({ createdAt: 1 });
     return NextResponse.json(teams, { status: 200 });
   } catch (error) {
     console.error("GET /api/admin/teams: database unavailable", error);

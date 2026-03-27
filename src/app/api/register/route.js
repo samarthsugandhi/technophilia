@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 function generateRegistrationId(count, attempt) {
   const numId = count + 1 + attempt;
-  return `BA-IS-${String(numId).padStart(3, '0')}`;
+  return `IS-TP-${String(numId).padStart(3, '0')}`;
 }
 
 const memberSchema = z.object({
@@ -14,6 +14,7 @@ const memberSchema = z.object({
   semester: z.string().min(1, "Semester is required"),
   usn: z.string().min(1, "USN/CSN is required"),
   email: z.string().email("Invalid email format"),
+  phone: z.string().regex(/^\d{10}$/, "Valid 10-digit phone number required"),
   branch: z.string().min(1, "Branch is required"),
   stayType: z.enum(['Local', 'Hostel']),
   hostelName: z.string().optional(),
@@ -33,18 +34,18 @@ const registerSchema = z.object({
     hostelName: z.string().optional(),
     hostel: z.string().optional(),
   }),
-  members: z.array(memberSchema).length(1, "Must have exactly 1 additional member"),
+  members: z.array(memberSchema).max(1, "Only 1 additional member is allowed"),
 }).superRefine((data, ctx) => {
   const requiresCSN = (semester) => semester === "1st Sem" || semester === "2nd Sem";
   const isCSN = (value) => /^\d{10}$/.test(String(value || "").trim());
   const isUSN = (value) => /^2BA\d{2}[A-Z]{2}\d{3}$/i.test(String(value || "").trim());
 
   const leaderNeedsCSN = requiresCSN(data.leader.semester);
-  if (leaderNeedsCSN && !isCSN(data.leader.usn)) {
+  if (leaderNeedsCSN && !isCSN(data.leader.usn) && !isUSN(data.leader.usn)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["leader", "usn"],
-      message: "Leader CSN must be a valid 10-digit number",
+      message: "For 1st/2nd semester, leader can enter either valid CSN (10 digits) or USN",
     });
   }
   if (!leaderNeedsCSN && !isUSN(data.leader.usn)) {
@@ -57,11 +58,11 @@ const registerSchema = z.object({
 
   data.members.forEach((member, index) => {
     const memberNeedsCSN = requiresCSN(member.semester);
-    if (memberNeedsCSN && !isCSN(member.usn)) {
+    if (memberNeedsCSN && !isCSN(member.usn) && !isUSN(member.usn)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["members", index, "usn"],
-        message: `Member ${index + 2} CSN must be a valid 10-digit number`,
+        message: `For 1st/2nd semester, member ${index + 2} can enter either valid CSN (10 digits) or USN`,
       });
     }
     if (!memberNeedsCSN && !isUSN(member.usn)) {

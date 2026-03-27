@@ -244,12 +244,17 @@ function TeamsSection({ teams, searchQuery, setSearchQuery, token, onUpdate }) {
     <div className="admin-section">
       <h2>Team Registrations</h2>
       <div className="admin-search">
-        <input
-          type="text"
-          placeholder="Search by team name, ID, or leader..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        <div className="search-wrapper">
+          <span className="search-icon">
+            🔍
+          </span>
+          <input
+            type="text"
+            placeholder="Search by team name, ID, or leader..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="teams-table">
@@ -381,7 +386,7 @@ function AttendanceSection({ token, onUpdate }) {
     const input = String(rawValue || "").trim();
     if (!input) return "";
 
-    const match = input.match(/TECH2026-[A-Z0-9]+/i);
+    const match = input.match(/IS-TP-\d+/i);
     if (match?.[0]) {
       return match[0].toUpperCase();
     }
@@ -533,7 +538,7 @@ function AttendanceSection({ token, onUpdate }) {
         <form className="attendance-manual-form" onSubmit={handleManualSubmit}>
           <input
             type="text"
-            placeholder="Enter Team Registration ID (e.g. TECH2026-AB12)"
+            placeholder="Enter Team Registration ID (e.g. IS-TP-001)"
             value={manualId}
             onChange={(e) => setManualId(e.target.value)}
             required
@@ -715,7 +720,7 @@ function ExportSection({ teams }) {
   };
 
   const getExportData = (filter) => {
-    let data = Array.isArray(teams) ? [...teams].reverse() : [];
+    let data = Array.isArray(teams) ? teams : [];
 
     if (filter === "attendance") {
       data = data.filter((t) => t.attendanceMarked);

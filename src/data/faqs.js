@@ -17,7 +17,7 @@ export const faqItems = [
   {
     question: "What is the team size?",
     answer:
-      "Each team must have exactly 2 members — 1 team leader and 1 additional member.",
+      "Maximum 2 members per team. A team can register with only the team leader, or with 1 additional teammate.",
   },
   {
     question: "Is registration free?",
@@ -37,12 +37,12 @@ export const faqItems = [
   {
     question: "How do I register my team?",
     answer:
-      "Click the 'Register' link in the navigation or visit /register. Fill in your team name, leader details (name, CSN/USN, branch, semester, hostel info), and add 1 more member. You'll receive a confirmation ID and a QR code upon successful registration.",
+      "Click the 'Register' link in the navigation or visit /register. Fill in your team name and team-lead details (name, CSN/USN, branch, semester, stay info). You may optionally add 1 teammate. You'll receive a confirmation ID and a QR code upon successful registration.",
   },
   {
     question: "What is CSN vs USN?",
     answer:
-      "CSN (College Seat Number) is used by students in 1st and 2nd semester. USN (University Seat Number) is used by students from 3rd to 8th semester. Make sure to select the right type before entering your number.",
+      "CSN (College Seat Number) is common in early semesters and USN (University Seat Number) is used across higher semesters. For TECHNOPHILIA 3.0 registration, 1st/2nd semester students may enter either CSN or USN if allotted; 3rd to 8th semester should enter USN.",
   },
   {
     question: "Who are the student coordinators?",

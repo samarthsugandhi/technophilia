@@ -215,6 +215,7 @@ const DashboardClient = () => {
                   <p><strong>Semester:</strong> {member?.semester || "N/A"}</p>
                   <p><strong>Branch:</strong> {member?.branch || "N/A"}</p>
                   <p><strong>Email:</strong> {member?.email || "N/A"}</p>
+                  <p><strong>Phone:</strong> {member?.phone || "N/A"}</p>
                   <p><strong>Stay Type:</strong> {member?.stayType || "N/A"} {member?.hostelName ? `(${member.hostelName})` : ''}</p>
                 </div>
               ) : null)}
