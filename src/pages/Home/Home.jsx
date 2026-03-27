@@ -29,6 +29,7 @@ const Home = () => {
   const titlesRef = useRef([]);
   const stickyWorkHeaderRef = useRef(null);
   const homeWorkRef = useRef(null);
+  const hintWrapperRef = useRef(null);
   const contactRef = useRef(null);
   const [showRegisterBtn, setShowRegisterBtn] = useState(false); // hidden by default
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -165,8 +166,10 @@ const Home = () => {
 
     const workHeaderSection = stickyWorkHeaderRef.current;
     const homeWorkSection = homeWorkRef.current;
+    const scrollHintWrap = hintWrapperRef.current;
 
     let workHeaderPinTrigger;
+    let hintFadeTrigger;
     if (workHeaderSection && homeWorkSection) {
       workHeaderPinTrigger = ScrollTrigger.create({
         trigger: workHeaderSection,
@@ -176,13 +179,24 @@ const Home = () => {
         pin: true,
         pinSpacing: false,
       });
+      
+      if (scrollHintWrap) {
+        hintFadeTrigger = gsap.to(scrollHintWrap, {
+          opacity: 0,
+          scrollTrigger: {
+            trigger: homeWorkSection,
+            start: "top 70%",
+            end: "top 40%",
+            scrub: true,
+          }
+        });
+      }
     }
 
     return () => {
       clearInterval(intervalId);
-      if (workHeaderPinTrigger) {
-        workHeaderPinTrigger.kill();
-      }
+      if (workHeaderPinTrigger) workHeaderPinTrigger.kill();
+      if (hintFadeTrigger && hintFadeTrigger.scrollTrigger) hintFadeTrigger.scrollTrigger.kill();
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -248,11 +262,13 @@ const Home = () => {
           <AnimatedCopy tag="h1" animateOnScroll="true">
             Event Lineup
           </AnimatedCopy>
-          <div className="event-scroll-hint">
-            <span>Scroll Down</span>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <div ref={hintWrapperRef} style={{ position: 'absolute', bottom: '3em', left: '50%', transform: 'translateX(-50%)', width: '100%' }}>
+            <div className="event-scroll-hint" style={{ bottom: '0' }}>
+              <span>Scroll Down</span>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
         </section>
 
