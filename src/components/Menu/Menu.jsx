@@ -10,6 +10,7 @@ const Menu = () => {
   const menuLinks = [
     { path: "/", label: "Home" },
     { path: "/#events", label: "Events" },
+    { path: "/event-flow", label: "Event Flow" },
     { path: "/register", label: "Register" },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },

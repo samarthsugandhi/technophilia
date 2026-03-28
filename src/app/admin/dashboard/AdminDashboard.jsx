@@ -279,6 +279,7 @@ function TeamsSection({ teams, searchQuery, setSearchQuery, token, onUpdate }) {
 
 function TeamRow({ team, token, onUpdate }) {
   const [expanded, setExpanded] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   return (
     <>
@@ -316,10 +317,19 @@ function TeamRow({ team, token, onUpdate }) {
         </div>
         <div className="team-cell" onClick={(e) => e.stopPropagation()}>
           <span className="cell-label">Action</span>
-          <DeleteTeamBtn team={team} token={token} onDelete={onUpdate} />
+          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+            <button
+              className="btn-edit"
+              onClick={() => setShowEdit(true)}
+              title="Edit team details"
+            >
+              ✏️
+            </button>
+            <DeleteTeamBtn team={team} token={token} onDelete={onUpdate} />
+          </div>
         </div>
       </div>
-      
+
       {expanded && (
         <div className="teams-row-expanded">
           <div className="expanded-section">
@@ -341,36 +351,207 @@ function TeamRow({ team, token, onUpdate }) {
           ))}
         </div>
       )}
+
+      {showEdit && (
+        <EditTeamModal
+          team={team}
+          token={token}
+          onClose={() => setShowEdit(false)}
+          onUpdate={() => { onUpdate(); setShowEdit(false); }}
+        />
+      )}
     </>
   );
 }
 
 function DeleteTeamBtn({ team, token, onDelete }) {
   const [deleting, setDeleting] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleDelete = async () => {
-    if (!confirm(`Delete ${team.teamName}?`)) return;
+  const handleDeleteConfirmed = async () => {
+    setShowConfirm(false);
     setDeleting(true);
     try {
       const res = await fetch(`/api/admin/teams/${team._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) onDelete();
+      if (res.ok) {
+        onDelete();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to delete team.");
+      }
     } catch {
-      alert("Failed to delete");
+      alert("Network error. Could not delete team.");
     }
     setDeleting(false);
   };
 
   return (
-    <button
-      onClick={handleDelete}
-      disabled={deleting}
-      className="btn-delete"
-    >
-      {deleting ? "..." : "🗑"}
-    </button>
+    <>
+      <button
+        onClick={() => setShowConfirm(true)}
+        disabled={deleting}
+        className="btn-delete"
+        title="Delete team"
+      >
+        {deleting ? "⏳" : "🗑"}
+      </button>
+      {showConfirm && (
+        <ConfirmModal
+          message={`Permanently delete "${team.teamName}"?`}
+          subMessage={`Team ID: ${team.registrationId} — This action cannot be undone. All their data will be erased.`}
+          confirmLabel="Yes, Delete"
+          cancelLabel="No, Cancel"
+          dangerous={true}
+          onConfirm={handleDeleteConfirmed}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+    </>
+  );
+}
+
+function ConfirmModal({ message, subMessage, confirmLabel = "Confirm", cancelLabel = "Cancel", onConfirm, onCancel, dangerous = false }) {
+  return (
+    <div className="admin-modal-overlay" onClick={onCancel}>
+      <div className="admin-confirm-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="admin-confirm-icon">{dangerous ? "⚠️" : "❓"}</div>
+        <h3 className="admin-confirm-title">{message}</h3>
+        {subMessage && <p className="admin-confirm-sub">{subMessage}</p>}
+        <div className="admin-confirm-actions">
+          <button className="admin-btn-cancel" onClick={onCancel}>{cancelLabel}</button>
+          <button className={`admin-btn-confirm ${dangerous ? "danger" : ""}`} onClick={onConfirm}>{confirmLabel}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EditTeamModal({ team, token, onClose, onUpdate }) {
+  const hasMember = Array.isArray(team.members) && team.members.length > 0;
+  const [form, setForm] = useState({
+    teamName: team.teamName || "",
+    "leader.name": team.leader?.name || "",
+    "leader.usn": team.leader?.usn || "",
+    "leader.email": team.leader?.email || "",
+    "leader.phone": team.leader?.phone || "",
+    ...(hasMember ? {
+      "members.0.name": team.members[0]?.name || "",
+      "members.0.usn": team.members[0]?.usn || "",
+      "members.0.email": team.members[0]?.email || "",
+      "members.0.phone": team.members[0]?.phone || "",
+    } : {}),
+  });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [showConfirmSave, setShowConfirmSave] = useState(false);
+
+  const handleChange = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  const doSave = async () => {
+    setShowConfirmSave(false);
+    setSaving(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/admin/teams/${team._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ updates: form }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        onUpdate();
+      } else {
+        setError(data.error || "Failed to update. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection.");
+    }
+    setSaving(false);
+  };
+
+  return (
+    <>
+      <div className="admin-modal-overlay" onClick={onClose}>
+        <div className="admin-edit-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="admin-edit-header">
+            <h3>✏️ Edit Team — <span style={{ color: '#c8a97a' }}>{team.registrationId}</span></h3>
+            <button className="admin-edit-close" onClick={onClose}>×</button>
+          </div>
+          <div className="admin-edit-body">
+            <div className="admin-edit-group">
+              <label>Team Name</label>
+              <input value={form.teamName} onChange={(e) => handleChange("teamName", e.target.value)} />
+            </div>
+
+            <h4 className="admin-edit-section-title">Leader Details</h4>
+            <div className="admin-edit-grid">
+              <div className="admin-edit-group">
+                <label>Name</label>
+                <input value={form["leader.name"]} onChange={(e) => handleChange("leader.name", e.target.value)} />
+              </div>
+              <div className="admin-edit-group">
+                <label>USN / CSN</label>
+                <input value={form["leader.usn"]} onChange={(e) => handleChange("leader.usn", e.target.value)} />
+              </div>
+              <div className="admin-edit-group">
+                <label>Email</label>
+                <input type="email" value={form["leader.email"]} onChange={(e) => handleChange("leader.email", e.target.value)} />
+              </div>
+              <div className="admin-edit-group">
+                <label>Phone</label>
+                <input value={form["leader.phone"]} onChange={(e) => handleChange("leader.phone", e.target.value)} />
+              </div>
+            </div>
+
+            {hasMember && (
+              <>
+                <h4 className="admin-edit-section-title">Teammate Details</h4>
+                <div className="admin-edit-grid">
+                  <div className="admin-edit-group">
+                    <label>Name</label>
+                    <input value={form["members.0.name"]} onChange={(e) => handleChange("members.0.name", e.target.value)} />
+                  </div>
+                  <div className="admin-edit-group">
+                    <label>USN / CSN</label>
+                    <input value={form["members.0.usn"]} onChange={(e) => handleChange("members.0.usn", e.target.value)} />
+                  </div>
+                  <div className="admin-edit-group">
+                    <label>Email</label>
+                    <input type="email" value={form["members.0.email"]} onChange={(e) => handleChange("members.0.email", e.target.value)} />
+                  </div>
+                  <div className="admin-edit-group">
+                    <label>Phone</label>
+                    <input value={form["members.0.phone"]} onChange={(e) => handleChange("members.0.phone", e.target.value)} />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {error && <p className="admin-edit-error">{error}</p>}
+          </div>
+          <div className="admin-edit-footer">
+            <button className="admin-btn-cancel" onClick={onClose}>Cancel</button>
+            <button className="admin-btn-confirm" onClick={() => setShowConfirmSave(true)} disabled={saving}>
+              {saving ? "Saving..." : "✓ Save Changes"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {showConfirmSave && (
+        <ConfirmModal
+          message={`Save changes to "${form.teamName || team.teamName}"?`}
+          subMessage="Only the fields you edited will be updated. All other team data and other teams remain untouched."
+          confirmLabel="Yes, Save"
+          cancelLabel="No, Go Back"
+          onConfirm={doSave}
+          onCancel={() => setShowConfirmSave(false)}
+        />
+      )}
+    </>
   );
 }
 

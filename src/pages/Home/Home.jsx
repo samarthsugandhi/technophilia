@@ -298,6 +298,11 @@ const Home = () => {
               </div>
             ))}
           </div>
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0 60px', position: 'relative', zIndex: 10 }}>
+            <Link href="/event-flow" className="event-flow-cta-btn">
+              VIEW EVENT FLOW →
+            </Link>
+          </div>
         </section>
 
         {liveData?.shortlisted?.length > 0 && (
