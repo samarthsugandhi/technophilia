@@ -291,6 +291,25 @@
   z-index: 2;
 }
 
+.event-demo-video-wrapper {
+  margin-top: 28px;
+}
+
+.event-demo-video-title {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  color: #141414;
+}
+
+.event-demo-video {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #d8d8d8;
+  background: #000;
+}
+
 .next-event-section {
   width: 100%;
   display: flex;
@@ -735,6 +754,10 @@
 
   .event-description {
     font-size: 1.05rem;
+  }
+
+  .event-demo-video-wrapper {
+    margin-top: 20px;
   }
   
   .next-event-section {

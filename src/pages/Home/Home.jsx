@@ -261,6 +261,51 @@ const Home = () => {
           </button>
         </section>
 
+        <section
+          className="live-section shortlisted-live-section"
+          style={{ display: liveData?.shortlisted?.length > 0 ? "block" : "none" }}
+          aria-hidden={!(liveData?.shortlisted?.length > 0)}
+          suppressHydrationWarning
+        >
+          <AnimatedCopy tag="h2" animateOnScroll={true} className="live-title">Shortlisted Teams</AnimatedCopy>
+          <div className="live-grid">
+            {(liveData?.shortlisted || []).map((st, i) => (
+              <div key={`${st.teamName}-${i}`} className="live-shortlisted-item">
+                <h3>{st.teamName}</h3>
+                <p>{st.registrationId || "Registration ID pending"}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          className="live-section winners-live-section"
+          style={{ display: liveData?.winners?.length > 0 ? "block" : "none" }}
+          aria-hidden={!(liveData?.winners?.length > 0)}
+          suppressHydrationWarning
+        >
+          <AnimatedCopy tag="h2" animateOnScroll={true} className="winners-title">★ Winner Announcement ★</AnimatedCopy>
+          <p className="winner-legend">1st = Winner, 2nd = 1st Runner-up, 3rd = 2nd Runner-up</p>
+          <div className="winners-grid">
+            {(liveData?.winners || []).map((win, i) => (
+              <div key={`${win.teamName}-${i}`} className="live-winner-item">
+                <span className="winner-rank-pill">{win.awardLabel || "Winner"}</span>
+                <h3>{win.teamName}</h3>
+                <div className="winner-names">
+                  {[win.leader?.name, ...(win.members || []).map((m) => m.name)]
+                    .filter(Boolean)
+                    .map((name, idx, arr) => (
+                      <React.Fragment key={`${win.teamName}-${name}-${idx}`}>
+                        <span className="teammate-name">{name}</span>
+                        {idx < arr.length - 1 ? " & " : ""}
+                      </React.Fragment>
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section ref={stickyWorkHeaderRef} className="sticky-work-header">
           <div ref={presentBannerRef} className="present-banner-wrapper">
             <img src="/home/present-banner.png" alt="Present Banner" className="present-banner-img" />
@@ -305,45 +350,6 @@ const Home = () => {
           </div>
         </section>
 
-        {liveData?.shortlisted?.length > 0 && (
-          <section className="live-section shortlisted-live-section">
-            <AnimatedCopy tag="h2" animateOnScroll={true} className="live-title">Shortlisted Teams</AnimatedCopy>
-            <div className="live-grid">
-              {liveData.shortlisted.map((st, i) => (
-                <div key={i} className="live-shortlisted-item">
-                  <h3>{st.teamName}</h3>
-                  <p>{st.registrationId || "Registration ID pending"}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {liveData?.winners?.length > 0 && (
-          <section className="live-section winners-live-section">
-            <AnimatedCopy tag="h2" animateOnScroll={true} className="winners-title">★ Winner Announcement ★</AnimatedCopy>
-            <p className="winner-legend">1st = Winner, 2nd = 1st Runner-up, 3rd = 2nd Runner-up</p>
-            <div className="winners-grid">
-              {liveData.winners.map((win, i) => (
-                <div key={`${win.teamName}-${i}`} className="live-winner-item">
-                  <span className="winner-rank-pill">{win.awardLabel || "Winner"}</span>
-                  <h3>{win.teamName}</h3>
-                  <div className="winner-names">
-                    {[win.leader?.name, ...(win.members || []).map((m) => m.name)]
-                      .filter(Boolean)
-                      .map((name, idx, arr) => (
-                        <React.Fragment key={`${win.teamName}-${name}-${idx}`}>
-                          <span className="teammate-name">{name}</span>
-                          {idx < arr.length - 1 ? " & " : ""}
-                        </React.Fragment>
-                      ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {showRegisterBtn && !selectedEvent && (
           <Link
             href="/register"
@@ -380,6 +386,15 @@ const Home = () => {
                   <div className="event-description">
                     {selectedEvent.description || "Description coming soon..."}
                   </div>
+                  {selectedEvent.title === "MIND YOUR MANOR" && (
+                    <div className="event-demo-video-wrapper">
+                      <h3 className="event-demo-video-title">Demo Video</h3>
+                      <video className="event-demo-video" controls preload="metadata">
+                        <source src="/home/mind-your-manor-demo.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
