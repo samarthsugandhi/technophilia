@@ -22,48 +22,10 @@
   display: flex;
   justify-content: space-between;
   z-index: 1;
-  transform: translateY(18px);
-}
-
-.hero-registration-popup {
-  width: min(760px, 94vw);
-  margin: 10px auto 2px;
-  padding: 16px 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 86, 86, 0.62);
-  background: linear-gradient(135deg, rgba(52, 2, 2, 0.82), rgba(92, 8, 8, 0.72));
-  box-shadow: 0 14px 34px rgba(57, 0, 0, 0.5);
-  text-align: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  animation: popupPulse 1.5s ease-in-out infinite alternate;
-}
-
-.hero-registration-popup-kicker {
-  display: inline-block;
-  margin: 0 0 8px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 120, 120, 0.75);
-  background: rgba(130, 8, 8, 0.35);
-  color: #ff7a7a;
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  animation: alertBadgePulse 1.8s ease-in-out infinite;
-}
-
-.hero-registration-popup-text {
-  margin: 0;
-  color: #fff3f3;
-  font-size: 1.03rem;
-  line-height: 1.5;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .hero-register-btn {
-  margin-top: 14px;
+  margin-top: 36px;
   padding: 14px 38px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f5d38a, #c9953c);
@@ -696,22 +658,6 @@
   50%       { transform: translateX(-50%) translateY(10px); opacity: 1; }
 }
 
-@keyframes popupPulse {
-  from { box-shadow: 0 10px 24px rgba(92, 0, 0, 0.4); }
-  to { box-shadow: 0 16px 40px rgba(186, 10, 10, 0.55); }
-}
-
-@keyframes alertBadgePulse {
-  0%, 100% {
-    border-color: rgba(255, 120, 120, 0.7);
-    box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.25);
-  }
-  50% {
-    border-color: rgba(255, 156, 156, 0.95);
-    box-shadow: 0 0 0 5px rgba(255, 82, 82, 0.14);
-  }
-}
-
 @media (max-width: 1000px) {
 
   .hero {
@@ -725,26 +671,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    transform: translateY(12px);
-  }
-
-  .hero-registration-popup {
-    margin: 8px auto 2px;
-    padding: 14px 14px;
-    border-radius: 12px;
-  }
-
-  .hero-registration-popup-kicker {
-    font-size: 0.74rem;
-    letter-spacing: 1.5px;
-  }
-
-  .hero-registration-popup-text {
-    font-size: 0.9rem;
   }
 
   .hero-register-btn {
-    margin-top: 14px;
+    margin-top: 36px;
   }
 
   .tech-title {

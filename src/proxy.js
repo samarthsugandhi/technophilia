@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export function middleware() {
+export function proxy() {
   const response = NextResponse.next();
 
   // Add security headers
@@ -12,7 +12,6 @@ export function middleware() {
   return response;
 }
 
-// Avoid middleware deprecation by limiting to API routes only
 export const config = {
   matcher: ["/api/:path*"],
 };

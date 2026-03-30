@@ -3,6 +3,9 @@ import connectDB from "../../lib/mongodb";
 import Settings from "../../models/Settings";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata = {
   title: "Register | TECHNOPHILIA 3.0",
 };

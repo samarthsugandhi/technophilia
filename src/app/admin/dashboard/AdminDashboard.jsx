@@ -103,8 +103,12 @@ export default function AdminDashboard() {
         body: JSON.stringify({ isRegistrationOpen: !isRegOpen }),
       });
       if (res.ok) {
-        setIsRegOpen(!isRegOpen);
-        alert(`Registration has successfully been ${isRegOpen ? "STOPPED" : "OPENED"}.`);
+        const updated = await res.json();
+        const nextValue = typeof updated?.isRegistrationOpen === "boolean"
+          ? updated.isRegistrationOpen
+          : !isRegOpen;
+        setIsRegOpen(nextValue);
+        alert(`Registration has successfully been ${nextValue ? "OPENED" : "STOPPED"}.`);
       } else {
         alert("Failed to change registration status.");
       }

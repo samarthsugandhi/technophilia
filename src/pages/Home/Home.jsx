@@ -220,12 +220,6 @@ const Home = () => {
             <h2 style={{ marginTop: '20px' }}>
               {timeLeft.days}D:{String(timeLeft.hours).padStart(2,'0')}H:{String(timeLeft.mins).padStart(2,'0')}M:{String(timeLeft.secs).padStart(2,'0')}S
             </h2>
-            <div className="hero-registration-popup" role="alert" aria-live="polite">
-              <p className="hero-registration-popup-kicker">⚠ALERT</p>
-              <p className="hero-registration-popup-text">
-                Registration closes <strong>today at 12:00 AM (midnight)</strong>. Secure your team spot now before entries are locked.
-              </p>
-            </div>
             <Link href="/register" className="hero-register-btn">
               REGISTER NOW
             </Link>
