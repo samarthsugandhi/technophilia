@@ -314,7 +314,8 @@ function TeamRow({ team, token, onUpdate }) {
             {team.winner && <span className="badge winner">🏆 Winner</span>}
             {team.firstRunnerUp && <span className="badge winner">🥈 1st Runner</span>}
             {team.secondRunnerUp && <span className="badge winner">🥉 2nd Runner</span>}
-            {!team.attendanceMarked && !team.shortlisted && !team.winner && !team.firstRunnerUp && !team.secondRunnerUp && (
+            {team.consolationAward && <span className="badge winner">🏅 Consolation</span>}
+            {!team.attendanceMarked && !team.shortlisted && !team.winner && !team.firstRunnerUp && !team.secondRunnerUp && !team.consolationAward && (
               <span className="badge pending">⏳ Pending</span>
             )}
           </span>
@@ -851,6 +852,7 @@ function WinnerCard({ team, token, onUpdate }) {
     if (item.winner) return "Winner";
     if (item.firstRunnerUp) return "1st Runner-up";
     if (item.secondRunnerUp) return "2nd Runner-up";
+    if (item.consolationAward) return "Consolation Award";
     return "Not announced";
   };
 
@@ -877,7 +879,7 @@ function WinnerCard({ team, token, onUpdate }) {
   };
 
   return (
-    <div className={`winner-card ${team.winner || team.firstRunnerUp || team.secondRunnerUp ? "active" : ""}`}>
+    <div className={`winner-card ${team.winner || team.firstRunnerUp || team.secondRunnerUp || team.consolationAward ? "active" : ""}`}>
       <h3>{team.teamName}</h3>
       <p className="winner-rank">{getAwardLabel(team)}</p>
       <div className="winner-members">
@@ -907,6 +909,13 @@ function WinnerCard({ team, token, onUpdate }) {
           className={`btn-winner ${team.secondRunnerUp ? "active" : ""}`}
         >
           {team.secondRunnerUp ? "🥉 2nd Runner-up" : "Mark 2nd Runner-up"}
+        </button>
+        <button
+          onClick={() => updateAward("consolationAward", !team.consolationAward)}
+          disabled={updating}
+          className={`btn-winner ${team.consolationAward ? "active" : ""}`}
+        >
+          {team.consolationAward ? "🏅 Consolation Award" : "Mark Consolation Award"}
         </button>
       </div>
     </div>
@@ -949,7 +958,7 @@ function ExportSection({ teams }) {
     if (filter === "shortlisted") {
       data = data.filter((t) => t.shortlisted);
     } else if (filter === "winners") {
-      data = data.filter((t) => t.winner);
+      data = data.filter((t) => t.winner || t.firstRunnerUp || t.secondRunnerUp || t.consolationAward);
     }
 
     return data;
@@ -974,6 +983,7 @@ function ExportSection({ teams }) {
       t.winner ? "Yes" : "No",
       t.firstRunnerUp ? "Yes" : "No",
       t.secondRunnerUp ? "Yes" : "No",
+      t.consolationAward ? "Yes" : "No",
     ]);
   };
 
@@ -995,6 +1005,7 @@ function ExportSection({ teams }) {
     "Winner",
     "1st Runner-up",
     "2nd Runner-up",
+    "Consolation Award",
   ];
 
   // ─── ATTENDANCE-SPECIFIC: build two sub-rows per team ───────────────────────

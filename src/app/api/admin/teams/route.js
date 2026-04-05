@@ -48,7 +48,7 @@ export async function PATCH(req) {
   }
 
   const { teamId, field, value } = payload;
-  if (!['shortlisted', 'winner', 'firstRunnerUp', 'secondRunnerUp', 'attendanceMarked'].includes(field)) {
+  if (!['shortlisted', 'winner', 'firstRunnerUp', 'secondRunnerUp', 'consolationAward', 'attendanceMarked'].includes(field)) {
     return NextResponse.json({ error: "Invalid field update" }, { status: 400 });
   }
 
@@ -56,10 +56,11 @@ export async function PATCH(req) {
     await connectDB();
 
     const updatePayload = { [field]: value };
-    if (value === true && ["winner", "firstRunnerUp", "secondRunnerUp"].includes(field)) {
+    if (value === true && ["winner", "firstRunnerUp", "secondRunnerUp", "consolationAward"].includes(field)) {
       if (field !== "winner") updatePayload.winner = false;
       if (field !== "firstRunnerUp") updatePayload.firstRunnerUp = false;
       if (field !== "secondRunnerUp") updatePayload.secondRunnerUp = false;
+      if (field !== "consolationAward") updatePayload.consolationAward = false;
     }
 
     const updatedTeam = await Team.findByIdAndUpdate(

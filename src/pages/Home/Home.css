@@ -46,6 +46,29 @@
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
 }
 
+.hero-winners-popup {
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 215, 100, 0.45);
+  background: rgba(5, 5, 5, 0.72);
+  color: #ffdf64;
+  font-size: 0.84rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  font-weight: 800;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+  transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.hero-winners-popup:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 215, 100, 0.8);
+  color: #ffeaa3;
+}
+
 .hero-header h1 {
   color: var(--bg);
   line-height: 1;
@@ -461,6 +484,107 @@
   font-size: 0.95rem;
 }
 
+.winner-feature-section {
+  padding: 70px 5vw 0;
+  background: #090909;
+}
+
+.winner-feature-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 28px;
+  align-items: stretch;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.winner-feature-media {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 320px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.winner-feature-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.winner-feature-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 12px;
+}
+
+.winner-feature-kicker {
+  margin: 0;
+  color: #ffd86a;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 800;
+}
+
+.winner-feature-title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.2rem, 4vw, 4.4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.winner-feature-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.winner-feature-text {
+  margin: 0;
+  color: #d0d0d0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.winner-feature-text span {
+  color: #ffe7a0;
+  word-break: break-word;
+}
+
+.winner-feature-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 8px;
+  color: #000;
+  background: linear-gradient(135deg, #ffd86a, #c9953c);
+  text-decoration: none;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 10px 26px rgba(201, 149, 60, 0.25);
+}
+
+.winner-feature-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(201, 149, 60, 0.35);
+}
+
 .winners-live-section {
   background: #0a0a00;
   border-top: 1px solid #3d3200;
@@ -694,6 +818,25 @@
 
   .live-title {
     font-size: 2rem;
+  }
+
+  .winner-feature-section {
+    padding: 50px 1.25em 0;
+  }
+
+  .winner-feature-card {
+    grid-template-columns: 1fr;
+    padding: 18px;
+    gap: 18px;
+    border-radius: 18px;
+  }
+
+  .winner-feature-media {
+    min-height: 220px;
+  }
+
+  .winner-feature-text {
+    font-size: 0.98rem;
   }
 
   .winners-title {

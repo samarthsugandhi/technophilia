@@ -12,9 +12,9 @@ export async function GET() {
       .sort({ updatedAt: -1 });
 
     const winnerTeams = await Team.find({
-      $or: [{ winner: true }, { firstRunnerUp: true }, { secondRunnerUp: true }],
+      $or: [{ winner: true }, { firstRunnerUp: true }, { secondRunnerUp: true }, { consolationAward: true }],
     })
-      .select('teamName leader.branch members leader.name winner firstRunnerUp secondRunnerUp')
+      .select('teamName leader.branch members leader.name winner firstRunnerUp secondRunnerUp consolationAward')
       .sort({ updatedAt: -1 });
 
     const winners = winnerTeams
@@ -28,6 +28,9 @@ export async function GET() {
         }
         if (team.secondRunnerUp) {
           entries.push({ ...team.toObject(), awardRank: "secondRunnerUp", awardLabel: "2nd Runner-up", awardOrder: 3 });
+        }
+        if (team.consolationAward) {
+          entries.push({ ...team.toObject(), awardRank: "consolationAward", awardLabel: "Consolation Award", awardOrder: 4 });
         }
         return entries;
       })

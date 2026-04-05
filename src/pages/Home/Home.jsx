@@ -37,6 +37,10 @@ const Home = () => {
   const [showRegisterBtn, setShowRegisterBtn] = useState(false); // hidden by default
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [savedScroll, setSavedScroll] = useState(0);
+
+  const scrollToWinners = () => {
+    winnersRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   
   const handleEventClick = (work) => {
     setSavedScroll(window.scrollY);
@@ -225,6 +229,15 @@ const Home = () => {
             <Link href="/register" className="hero-register-btn">
               REGISTER NOW
             </Link>
+            {liveData?.winners?.length > 0 && (
+              <button
+                type="button"
+                className="hero-winners-popup"
+                onClick={scrollToWinners}
+              >
+                🏆 Winners Released — Tap to View
+              </button>
+            )}
           </div>
         </section>
 
@@ -282,14 +295,41 @@ const Home = () => {
         </section>
 
         <section
+          className="winner-feature-section"
+          style={{ display: liveData?.winners?.length > 0 ? "block" : "none" }}
+          aria-hidden={!(liveData?.winners?.length > 0)}
+          suppressHydrationWarning
+        >
+          <div className="winner-feature-card">
+            <div className="winner-feature-media">
+              <img src="/home/winners-banner.png" alt="Technophilia winners banner" />
+            </div>
+            <div className="winner-feature-copy">
+              <p className="winner-feature-kicker">Results Released</p>
+              <AnimatedCopy tag="h2" animateOnScroll={true} className="winner-feature-title">
+                Winners Spotlight
+              </AnimatedCopy>
+              <div className="winner-feature-quotes">
+                <p className="winner-feature-text">“Champions are built one bold decision at a time.”</p>
+                <p className="winner-feature-text">“Today we celebrate code, courage, and teamwork.”</p>
+              </div>
+              <a href="#winners" className="winner-feature-link">
+                View Winner Board →
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section
           ref={winnersRef}
           className="live-section winners-live-section"
+          id="winners"
           style={{ display: liveData?.winners?.length > 0 ? "block" : "none" }}
           aria-hidden={!(liveData?.winners?.length > 0)}
           suppressHydrationWarning
         >
           <AnimatedCopy tag="h2" animateOnScroll={true} className="winners-title">★ Winner Announcement ★</AnimatedCopy>
-          <p className="winner-legend">1st = Winner, 2nd = 1st Runner-up, 3rd = 2nd Runner-up</p>
+          <p className="winner-legend">1st = Winner, 2nd = 1st Runner-up, 3rd = 2nd Runner-up, 4th = Consolation Award</p>
           <div className="winners-grid">
             {(liveData?.winners || []).map((win, i) => (
               <div key={`${win.teamName}-${i}`} className="live-winner-item">

@@ -32,6 +32,7 @@ const teamSchema = new mongoose.Schema({
   winner: { type: Boolean, default: false },
   firstRunnerUp: { type: Boolean, default: false },
   secondRunnerUp: { type: Boolean, default: false },
+  consolationAward: { type: Boolean, default: false },
 }, { timestamps: true });
 
 function arrayLimit(val) {
