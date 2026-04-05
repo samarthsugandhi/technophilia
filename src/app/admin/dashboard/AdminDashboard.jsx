@@ -622,7 +622,8 @@ function AttendanceSection({ token, onUpdate }) {
     } finally {
       setTimeout(() => {
         isProcessingRef.current = false;
-      }, 1200);
+        setScanResult({ state: "idle", message: "Ready" });
+      }, 800);
     }
   }, [extractRegistrationId, onUpdate, token]);
 
@@ -633,15 +634,23 @@ function AttendanceSection({ token, onUpdate }) {
 
     const startScanner = async () => {
       try {
-        const { Html5Qrcode } = await import("html5-qrcode");
+        const { Html5Qrcode, Html5QrcodeSupportedFormats } = await import("html5-qrcode");
         if (!mounted) return;
 
-        const scanner = new Html5Qrcode("admin-attendance-qr-reader");
+        const scanner = new Html5Qrcode("admin-attendance-qr-reader", {
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+          verbose: false,
+        });
         scannerRef.current = scanner;
 
         await scanner.start(
           { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 220, height: 220 } },
+          {
+            fps: 25,
+            qrbox: { width: 200, height: 200 },
+            aspectRatio: 1.0,
+            disableFlip: false,
+          },
           (decodedText) => {
             if (isProcessingRef.current) return;
             submitAttendance(decodedText);
@@ -650,16 +659,16 @@ function AttendanceSection({ token, onUpdate }) {
         );
 
         if (mounted) {
-          setScannerState("Camera active. Show QR code to scan.");
+          setScannerState("✅ Camera active — show QR code to scan");
         }
       } catch {
         if (mounted) {
-          setScannerState("Unable to access camera. Check permissions and HTTPS/localhost.");
+          setScannerState("⚠️ Unable to access camera. Check permissions and HTTPS/localhost.");
         }
       }
     };
 
-    setScannerState("Initializing camera...");
+    setScannerState("⏳ Initializing camera...");
     startScanner();
 
     return () => {
@@ -715,7 +724,12 @@ function AttendanceSection({ token, onUpdate }) {
       {mode === "qr" && (
         <div className="attendance-card">
           <div id="admin-attendance-qr-reader" className="attendance-qr-reader" />
-          <p className="attendance-help">{scannerState}</p>
+          <p className="attendance-help" style={{
+            color: scannerState.startsWith("✅") ? "#4ade80" :
+                   scannerState.startsWith("⚠️") ? "#f87171" : "#aaa",
+          }}>
+            {scannerState}
+          </p>
         </div>
       )}
 
@@ -734,7 +748,30 @@ function AttendanceSection({ token, onUpdate }) {
         </form>
       )}
 
-      <div className={`attendance-toast ${scanResult.state}`}>
+      <div
+        className={`attendance-toast ${scanResult.state}`}
+        style={{
+          fontSize: scanResult.state !== "idle" ? "1.15rem" : undefined,
+          fontWeight: scanResult.state !== "idle" ? "800" : undefined,
+          border: scanResult.state === "success" ? "2px solid #4ade80" :
+                  scanResult.state === "error" ? "2px solid #f87171" : undefined,
+          background: scanResult.state === "success" ? "rgba(74,222,128,0.08)" :
+                      scanResult.state === "error" ? "rgba(248,113,113,0.08)" : undefined,
+          color: scanResult.state === "success" ? "#4ade80" :
+                 scanResult.state === "error" ? "#f87171" : "#aaa",
+          transition: "all 0.2s ease",
+          padding: "16px 20px",
+          borderRadius: "8px",
+          textAlign: "center",
+          marginTop: "12px",
+          minHeight: "56px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {scanResult.state === "success" && <span style={{ marginRight: "8px", fontSize: "1.4rem" }}>✅</span>}
+        {scanResult.state === "error" && <span style={{ marginRight: "8px", fontSize: "1.4rem" }}>❌</span>}
         {scanResult.message}
       </div>
     </div>
@@ -907,9 +944,9 @@ function ExportSection({ teams }) {
   const getExportData = (filter) => {
     let data = Array.isArray(teams) ? teams : [];
 
-    if (filter === "attendance") {
-      data = data.filter((t) => t.attendanceMarked);
-    } else if (filter === "shortlisted") {
+    // NOTE: For "attendance" we export ALL teams (with Present/Absent in the column)
+    // so that it acts as a full attendance register sheet.
+    if (filter === "shortlisted") {
       data = data.filter((t) => t.shortlisted);
     } else if (filter === "winners") {
       data = data.filter((t) => t.winner);
@@ -960,23 +997,94 @@ function ExportSection({ teams }) {
     "2nd Runner-up",
   ];
 
+  // ─── ATTENDANCE-SPECIFIC: build two sub-rows per team ───────────────────────
+  // Columns: Team-ID | Team Name | Team Members | USN/CSN | Semester | Branch | Gmail | Phone Number | Stay | Attendance
+  const buildAttendanceSubRows = (data) => {
+    const rows = [];
+    (data || []).forEach((t) => {
+      const mate = t.members?.[0];
+      const attendanceVal = t.attendanceMarked ? "Present" : "Absent";
+
+      const leaderStay = t.leader?.stayType === "Hostel"
+        ? `Hostel (${t.leader?.hostelName || "N/A"})`
+        : (t.leader?.stayType || "Local");
+      const mateStay = mate
+        ? (mate.stayType === "Hostel" ? `Hostel (${mate.hostelName || "N/A"})` : (mate.stayType || "Local"))
+        : "";
+
+      // Row 1: Leader
+      rows.push([
+        t.registrationId || "-",     // Team-ID
+        t.teamName || "-",           // Team Name
+        t.leader?.name || "-",       // Team Members (Lead Name)
+        t.leader?.usn || t.leader?.csn || "-",  // USN/CSN
+        t.leader?.semester || "-",   // Semester
+        t.leader?.branch || "-",     // Branch
+        t.leader?.email || "-",      // Gmail
+        t.leader?.phone || "-",      // Phone Number
+        leaderStay,                  // Stay
+        attendanceVal,               // Attendance
+      ]);
+
+      // Row 2: Teammate (same Team-ID & Team Name repeated, Attendance repeated)
+      rows.push([
+        t.registrationId || "-",
+        t.teamName || "-",
+        mate ? (mate.name || "-") : "(No Teammate)",
+        mate ? (mate.usn || mate.csn || "-") : "-",
+        mate ? (mate.semester || "-") : "-",
+        mate ? (mate.branch || "-") : "-",
+        mate ? (mate.email || "-") : "-",
+        mate ? (mate.phone || "-") : "-",
+        mateStay || "-",
+        attendanceVal,
+      ]);
+    });
+    return rows;
+  };
+
+  const attendanceCSVHeaders = [
+    "Team-ID",
+    "Team Name",
+    "Team Members",
+    "USN/CSN",
+    "Semester",
+    "Branch",
+    "Gmail",
+    "Phone Number",
+    "Stay",
+    "Attendance",
+  ];
+  // ────────────────────────────────────────────────────────────────────────────
+
   const exportCSV = (filter) => {
-    const data = getExportData(filter);
-    const rows = buildRows(data);
+    let csvHeaders;
+    let rows;
+
+    if (filter === "attendance") {
+      const data = getExportData(filter);
+      csvHeaders = attendanceCSVHeaders;
+      rows = buildAttendanceSubRows(data);
+    } else {
+      const data = getExportData(filter);
+      csvHeaders = headers;
+      rows = buildRows(data);
+    }
 
     const csv = [
-      headers,
+      csvHeaders,
       ...rows,
     ]
-      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .map((row) => row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
       .join("\n");
 
-    const blob = new Blob([csv], { type: "text/csv" });
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `technophilia-${filter}-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   const exportPDF = async (filter) => {
@@ -987,22 +1095,8 @@ function ExportSection({ teams }) {
     let printHeaders = [];
 
     if (filter === "attendance") {
-      printHeaders = [
-        "Team Name",
-        "Team Registration ID",
-        "Leader Name (USN/CSN)",
-        "Teammate (USN/CSN)",
-        "Attendance 1st April",
-        "Attendance 2nd April",
-      ];
-      printRoutes = (data || []).map((t) => [
-        t.teamName || "-",
-        t.registrationId || "-",
-        `${t.leader?.name || "-"} (${t.leader?.usn || t.leader?.csn || "-"})`,
-        `${t.members?.[0]?.name || "-"} (${t.members?.[0]?.usn || t.members?.[0]?.csn || "-"})`,
-        t.attendanceMarked ? "✓ Present" : "", // Auto-fill if already grabbed
-        t.shortlisted ? "" : "N/A - Not Shortlisted", // 2nd April
-      ]);
+      printHeaders = attendanceCSVHeaders;
+      printRoutes = buildAttendanceSubRows(data);
     } else if (filter === "all_basic") {
       printHeaders = ["Team Name", "Registration ID", "Leader Email"];
       printRoutes = (data || []).map((t) => [
@@ -1028,26 +1122,70 @@ function ExportSection({ teams }) {
       40
     );
 
-    autoTable(doc, {
-      startY: 55,
-      head: [printHeaders],
-      body: printRoutes,
-      styles: {
-        fontSize: filter === "attendance" ? 9 : 7,
-        cellPadding: filter === "attendance" ? 8 : 4,
-      },
-      headStyles: {
-        fillColor: [30, 30, 30],
-      },
-      alternateRowStyles: {
-        fillColor: [245, 245, 245],
-      },
-      columnStyles: filter === "attendance" ? {
-        4: { cellWidth: 80 }, 
-        5: { cellWidth: 100 } 
-      } : {},
-      margin: { left: 18, right: 18 },
-    });
+    if (filter === "attendance") {
+      // Draw table with sub-row grouping: shade every even pair of rows differently
+      autoTable(doc, {
+        startY: 55,
+        head: [printHeaders],
+        body: printRoutes,
+        styles: {
+          fontSize: 8,
+          cellPadding: 5,
+          lineColor: [200, 200, 200],
+          lineWidth: 0.5,
+        },
+        headStyles: {
+          fillColor: [20, 20, 20],
+          textColor: [255, 255, 255],
+          fontStyle: "bold",
+          fontSize: 8.5,
+        },
+        // Shade team pairs (row 0-1 white, row 2-3 light gray, ...)
+        didParseCell: function (hookData) {
+          const teamIndex = Math.floor(hookData.row.index / 2);
+          if (teamIndex % 2 === 0) {
+            hookData.cell.styles.fillColor = [255, 255, 255];
+          } else {
+            hookData.cell.styles.fillColor = [240, 244, 250];
+          }
+          // Sub-row label: italicize second row of each team pair
+          if (hookData.row.index % 2 === 1 && hookData.column.index === 2) {
+            hookData.cell.styles.fontStyle = "italic";
+            hookData.cell.styles.textColor = [100, 100, 160];
+          }
+        },
+        columnStyles: {
+          0: { cellWidth: 65 },  // Team-ID
+          1: { cellWidth: 75 },  // Team Name
+          2: { cellWidth: 80 },  // Team Members
+          3: { cellWidth: 65 },  // USN/CSN
+          4: { cellWidth: 48 },  // Semester
+          5: { cellWidth: 60 },  // Branch
+          6: { cellWidth: 110 }, // Gmail
+          7: { cellWidth: 65 },  // Phone
+          8: { cellWidth: 70 },  // Stay
+          9: { cellWidth: 55 },  // Attendance
+        },
+        margin: { left: 14, right: 14 },
+      });
+    } else {
+      autoTable(doc, {
+        startY: 55,
+        head: [printHeaders],
+        body: printRoutes,
+        styles: {
+          fontSize: 7,
+          cellPadding: 4,
+        },
+        headStyles: {
+          fillColor: [30, 30, 30],
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        margin: { left: 18, right: 18 },
+      });
+    }
 
     doc.save(`technophilia-${filter}-${new Date().toISOString().split("T")[0]}.pdf`);
   };

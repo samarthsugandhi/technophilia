@@ -112,27 +112,6 @@
   position: relative;
 }
 
-.present-banner-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.present-banner-img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  opacity: 1; /* Fully opaque so it isn't faded */
-}
-
 .home-work {
   width: 100%;
   padding: 8em 2em;

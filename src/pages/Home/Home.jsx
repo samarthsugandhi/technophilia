@@ -29,8 +29,10 @@ const Home = () => {
   const titlesRef = useRef([]);
   const stickyWorkHeaderRef = useRef(null);
   const homeWorkRef = useRef(null);
+  const firstEventRef = useRef(null);
   const hintWrapperRef = useRef(null);
-  const presentBannerRef = useRef(null);
+  const shortlistedRef = useRef(null);
+  const winnersRef = useRef(null);
   const contactRef = useRef(null);
   const [showRegisterBtn, setShowRegisterBtn] = useState(false); // hidden by default
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -52,7 +54,7 @@ const Home = () => {
       window.scrollTo(0, savedScroll);
     }, 10);
   };
-  
+
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -167,8 +169,8 @@ const Home = () => {
 
     const workHeaderSection = stickyWorkHeaderRef.current;
     const homeWorkSection = homeWorkRef.current;
+    const firstEventItem = firstEventRef.current;
     const scrollHintWrap = hintWrapperRef.current;
-    const presentBannerWrap = presentBannerRef.current;
 
     let workHeaderPinTrigger;
     let hintFadeTrigger;
@@ -182,14 +184,14 @@ const Home = () => {
         pinSpacing: false,
       });
       
-      const fadeTargets = [scrollHintWrap, presentBannerWrap].filter(Boolean);
+      const fadeTargets = [scrollHintWrap].filter(Boolean);
       if (fadeTargets.length > 0) {
         hintFadeTrigger = gsap.to(fadeTargets, {
           opacity: 0,
           scrollTrigger: {
-            trigger: homeWorkSection,
-            start: "top 70%",
-            end: "top 40%",
+            trigger: firstEventItem || homeWorkSection,
+            start: "top 88%",
+            end: "top 58%",
             scrub: true,
           }
         });
@@ -262,6 +264,7 @@ const Home = () => {
         </section>
 
         <section
+          ref={shortlistedRef}
           className="live-section shortlisted-live-section"
           style={{ display: liveData?.shortlisted?.length > 0 ? "block" : "none" }}
           aria-hidden={!(liveData?.shortlisted?.length > 0)}
@@ -279,6 +282,7 @@ const Home = () => {
         </section>
 
         <section
+          ref={winnersRef}
           className="live-section winners-live-section"
           style={{ display: liveData?.winners?.length > 0 ? "block" : "none" }}
           aria-hidden={!(liveData?.winners?.length > 0)}
@@ -307,9 +311,6 @@ const Home = () => {
         </section>
 
         <section ref={stickyWorkHeaderRef} className="sticky-work-header">
-          <div ref={presentBannerRef} className="present-banner-wrapper">
-            <img src="/home/present-banner.png" alt="Present Banner" className="present-banner-img" />
-          </div>
           <AnimatedCopy tag="h1" animateOnScroll="true" style={{ position: 'relative', zIndex: 2 }}>
             Event Lineup
           </AnimatedCopy>
@@ -328,6 +329,7 @@ const Home = () => {
             {workItems.map((work, index) => (
               <div
                 key={work.id}
+                ref={index === 0 ? firstEventRef : null}
                 className="home-work-item"
                 onClick={() => handleEventClick(work)}
                 style={{ cursor: 'pointer' }}
